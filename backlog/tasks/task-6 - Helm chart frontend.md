@@ -1,6 +1,7 @@
 id: task-6
 title: "Helm chart: frontend SPA with HPA & Ingress"
 status: "To Do"
+depends_on: ["task-4"]
 created: 2025-08-01
 updated: 2025-08-01
 

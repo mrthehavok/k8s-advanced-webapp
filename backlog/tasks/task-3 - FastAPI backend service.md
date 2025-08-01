@@ -20,6 +20,7 @@ Implement the backend microservice for “Team Notes” using FastAPI:
 - Add OpenAPI docs (FastAPI default)
 - Basic pagination on list endpoint (limit, offset)
 - Liveness `/healthz` and readiness `/readyz` routes
+- CORS configuration to allow frontend API calls
 
 ## Acceptance Criteria
 

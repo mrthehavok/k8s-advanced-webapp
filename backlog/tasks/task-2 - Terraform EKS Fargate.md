@@ -14,8 +14,8 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 - OIDC provider association for the cluster
 - ALB Ingress Controller (AWS Load Balancer Controller) IAM policies
 - Output kubeconfig and cluster details
-- Cert-manager ClusterIssuer for Let’s Encrypt (staging + prod)
-- Tags & cost-control parameters (spot where applicable)
+- Tags & cost-control parameters
+- Fargate profiles for dev, monitoring, cert-manager, and argocd namespaces
 
 ## Acceptance Criteria
 

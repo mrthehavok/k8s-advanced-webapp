@@ -1,6 +1,7 @@
 id: task-5
 title: "Helm chart: backend service"
 status: "To Do"
+depends_on: ["task-3"]
 created: 2025-08-01
 updated: 2025-08-01
 

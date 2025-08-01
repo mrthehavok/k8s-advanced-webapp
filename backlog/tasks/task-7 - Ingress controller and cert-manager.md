@@ -1,6 +1,7 @@
 id: task-7
 title: "Ingress Controller & cert-manager ClusterIssuer"
 status: "To Do"
+depends_on: ["task-2"]
 created: 2025-08-01
 updated: 2025-08-01
 
@@ -8,10 +9,10 @@ updated: 2025-08-01
 
 Provision ingress and TLS stack:
 
-- Deploy AWS Load Balancer Controller via Helm in `infra/helm/aws-load-balancer-controller`
+- Deploy AWS Load Balancer Controller via Helm in `kube-system` namespace
 - Configure IAM role & policy (IRSA) from Terraform outputs
-- Install cert-manager via Helm (charts/cert-manager) in `monitoring` namespace
-- Create ClusterIssuer resources for Let’s Encrypt (staging & prod) using Route53 DNS-01 or HTTP-01 with ALB
+- Install cert-manager via Helm in dedicated `cert-manager` namespace
+- Create ClusterIssuer resources for Let's Encrypt (staging & prod) using Route53 DNS-01 or HTTP-01 with ALB
 - Validate certificate issuance with test Ingress
 
 ## Acceptance Criteria
