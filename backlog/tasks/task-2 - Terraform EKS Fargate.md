@@ -21,7 +21,7 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 
 - [ ] Terraform configuration in `infra/terraform/eks-fargate` directory
 - [ ] `terraform fmt` and `terraform validate` pass
-- [ ] Plan applies without errors in a sandbox AWS account
+- [ ] `terraform apply` completes without errors in a sandbox AWS account
 - [ ] Cluster supports ALB Ingress Controller & cert-manager
 - [ ] Documentation of variables and cost considerations
 
@@ -31,6 +31,8 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 - 2025-08-01 17:17: Creating terraform-eks-design.md document
 - 2025-08-01 17:20: Completed comprehensive Terraform EKS design document
 - 2025-08-01 15:25: Scaffolded complete directory structure and all required Terraform files for root and child modules per phase-1 scope.
+- 2025-08-01 15:36: Pushed branch and opened PR https://github.com/mrthehavok/k8s-advanced-webapp/pull/2
+- 2025-08-01 16:18: `terraform plan` and test `terraform apply` with dummy resource successful.
 
 ## Decisions Made
 
@@ -63,6 +65,8 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 - infra/terraform/eks-fargate/modules/irsa/policies/alb-controller.json (created)
 - infra/terraform/eks-fargate/modules/irsa/policies/cert-manager.json (created)
 - infra/terraform/eks-fargate/modules/irsa/policies/external-dns.json (created)
+- https://github.com/mrthehavok/k8s-advanced-webapp/pull/2 (pull request opened)
+- backlog/tasks/task-2 - Terraform EKS Fargate.md (updated)
 
 ## Blockers
 

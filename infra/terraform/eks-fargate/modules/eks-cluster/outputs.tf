@@ -1,36 +1,36 @@
-# AIDEV-TODO: Replace with actual resource outputs.
+# AIDEV-NOTE: Exposing outputs from the EKS module for downstream consumption.
 output "cluster_id" {
   description = "EKS cluster ID"
-  value       = "eks-placeholder"
+  value       = module.eks.cluster_id
 }
 
 output "cluster_arn" {
   description = "EKS cluster ARN"
-  value       = "arn:aws:eks:us-east-1:123456789012:cluster/eks-placeholder"
+  value       = module.eks.cluster_arn
 }
 
 output "cluster_endpoint" {
   description = "Endpoint for EKS control plane"
-  value       = "https://placeholder.eks.amazonaws.com"
+  value       = module.eks.cluster_endpoint
 }
 
 output "cluster_security_group_id" {
   description = "Security group ID attached to the EKS cluster"
-  value       = "sg-placeholder"
+  value       = module.eks.cluster_security_group_id
 }
 
 output "cluster_certificate_authority_data" {
   description = "Base64 encoded certificate data for cluster"
-  value       = "placeholder"
+  value       = module.eks.cluster_certificate_authority_data
   sensitive   = true
 }
 
 output "cluster_oidc_issuer_url" {
   description = "The URL on the EKS cluster OIDC Issuer"
-  value       = "https://oidc.eks.us-east-1.amazonaws.com/id/placeholder"
+  value       = module.eks.cluster_oidc_issuer_url
 }
 
 output "oidc_provider_arn" {
   description = "The ARN of the OIDC Provider"
-  value       = "arn:aws:iam::123456789012:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/placeholder"
+  value       = aws_iam_openid_connect_provider.oidc_provider.arn
 }
