@@ -34,3 +34,9 @@ output "oidc_provider_arn" {
   description = "The ARN of the OIDC Provider"
   value       = aws_iam_openid_connect_provider.oidc_provider.arn
 }
+
+# Fargate Profiles
+output "fargate_profile_names" {
+  description = "Names of Fargate profiles configured for the cluster"
+  value       = keys(var.fargate_profiles)
+}

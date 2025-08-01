@@ -52,6 +52,12 @@ output "irsa_role_arns" {
   value       = module.irsa.role_arns
 }
 
+# Fargate Profile Outputs
+output "fargate_profile_names" {
+  description = "List of Fargate profile names created for the cluster"
+  value       = module.eks_cluster.fargate_profile_names
+}
+
 # Kubeconfig
 output "kubeconfig_command" {
   description = "AWS CLI command to update kubeconfig"
