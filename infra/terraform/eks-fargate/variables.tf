@@ -2,22 +2,22 @@
 variable "project_name" {
   description = "Name of the project, used for resource naming and tagging"
   type        = string
-  default     = "team-notes"
+  default     = "k8s-advanced-webapp"
 }
 
 variable "environment" {
-  description = "Environment name (dev, staging, prod)"
+  description = "Environment name (dev, prod)"
   type        = string
   validation {
-    condition     = contains(["dev", "staging", "prod"], var.environment)
-    error_message = "Environment must be dev, staging, or prod."
+    condition     = contains(["dev", "prod"], var.environment)
+    error_message = "Environment must be dev or prod."
   }
 }
 
 variable "aws_region" {
   description = "AWS region for resources"
   type        = string
-  default     = "us-east-1"
+  default     = "eu-west-1"
 }
 
 variable "tags" {
@@ -61,7 +61,7 @@ variable "single_nat_gateway" {
 variable "cluster_version" {
   description = "Kubernetes version for EKS cluster"
   type        = string
-  default     = "1.30"
+  default     = "1.31"
 }
 
 variable "cluster_endpoint_private_access" {
