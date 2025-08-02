@@ -33,6 +33,9 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 - 2025-08-01 15:25: Scaffolded complete directory structure and all required Terraform files for root and child modules per phase-1 scope.
 - 2025-08-01 15:36: Pushed branch and opened PR https://github.com/mrthehavok/k8s-advanced-webapp/pull/2
 - 2025-08-01 16:18: `terraform plan` and test `terraform apply` with dummy resource successful.
+- 2025-08-01 17:06: Pushed IRSA & Fargate phase branch and opened PR https://github.com/mrthehavok/k8s-advanced-webapp/pull/4
+
+- 2025-08-02 13:38: Phase-4: Added outputs for ALB Controller and cert-manager IRSA roles. Updated documentation.
 
 ## Decisions Made
 
@@ -66,6 +69,10 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 - infra/terraform/eks-fargate/modules/irsa/policies/cert-manager.json (created)
 - infra/terraform/eks-fargate/modules/irsa/policies/external-dns.json (created)
 - https://github.com/mrthehavok/k8s-advanced-webapp/pull/2 (pull request opened)
+- https://github.com/mrthehavok/k8s-advanced-webapp/pull/4 (pull request opened)
+- infra/terraform/eks-fargate/outputs.tf (updated)
+- docs/terraform-eks-design.md (updated)
+- infra/terraform/eks-fargate/README.md (updated)
 - backlog/tasks/task-2 - Terraform EKS Fargate.md (updated)
 
 ## Blockers

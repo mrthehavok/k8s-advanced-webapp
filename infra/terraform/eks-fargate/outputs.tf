@@ -52,6 +52,23 @@ output "irsa_role_arns" {
   value       = module.irsa.role_arns
 }
 
+output "alb_controller_service_account" {
+  description = "IRSA service account details for the AWS Load Balancer Controller"
+  value = {
+    namespace = "kube-system"
+    name      = "aws-load-balancer-controller"
+    role_arn  = lookup(module.irsa.role_arns, "alb-controller", null)
+  }
+}
+
+output "cert_manager_service_account" {
+  description = "IRSA service account details for cert-manager"
+  value = {
+    namespace = "cert-manager"
+    name      = "cert-manager"
+    role_arn  = lookup(module.irsa.role_arns, "cert-manager", null)
+  }
+}
 # Fargate Profile Outputs
 output "fargate_profile_names" {
   description = "List of Fargate profile names created for the cluster"

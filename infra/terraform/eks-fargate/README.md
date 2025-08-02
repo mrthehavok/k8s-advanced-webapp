@@ -2,6 +2,10 @@
 
 This module provisions an AWS EKS cluster running entirely on Fargate profiles.
 
+## Prerequisites
+
+This stack assumes that the S3 bucket and DynamoDB table for the Terraform remote state backend have already been created. The `backend.tf` file is configured to use them, but they are not managed by this stack.
+
 ## Usage
 
 This is a root module designed to be deployed directly.
