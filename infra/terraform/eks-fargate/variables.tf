@@ -82,6 +82,12 @@ variable "cluster_endpoint_public_access_cidrs" {
   default     = ["0.0.0.0/0"]
 }
 
+variable "enable_cluster_autoscaler" {
+  description = "Enable EKS cluster autoscaler"
+  type        = bool
+  default     = false
+}
+
 # Fargate Profiles
 variable "fargate_profiles" {
   description = "Map of Fargate profile definitions"
