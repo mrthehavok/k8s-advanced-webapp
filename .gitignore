@@ -37,3 +37,27 @@ __pycache__/
 env/
 venv/
 tfplan
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Poetry
+poetry.lock
+
+# Database
+notes.db
+
+# Test reports
+.pytest_cache/
+coverage.xml
+htmlcov/
+
+# Coverage reports
+.coverage
