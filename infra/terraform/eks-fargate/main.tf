@@ -9,12 +9,20 @@ provider "kubernetes" {
   }
 }
 
+locals {
+  cluster_name = "${var.project_name}-${var.environment}"
+}
+
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 # AIDEV-TODO: Replace with actual module sources once implemented
 module "networking" {
   source = "./modules/networking"
 
   vpc_cidr             = var.vpc_cidr
-  azs                  = var.azs
+  azs                  = slice(data.aws_availability_zones.available.names, 0, 2)
   private_subnet_cidrs = var.private_subnet_cidrs
   public_subnet_cidrs  = var.public_subnet_cidrs
   single_nat_gateway   = var.single_nat_gateway

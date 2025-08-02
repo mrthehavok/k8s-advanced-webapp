@@ -34,12 +34,3 @@ module "eks" {
   )
 }
 
-data "tls_certificate" "cluster_thumbprint" {
-  url = module.eks.cluster_oidc_issuer_url
-}
-
-resource "aws_iam_openid_connect_provider" "oidc_provider" {
-  client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = [data.tls_certificate.cluster_thumbprint.certificates[0].sha1_fingerprint]
-  url             = module.eks.cluster_oidc_issuer_url
-}

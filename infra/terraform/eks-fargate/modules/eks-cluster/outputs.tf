@@ -32,7 +32,7 @@ output "cluster_oidc_issuer_url" {
 
 output "oidc_provider_arn" {
   description = "The ARN of the OIDC Provider"
-  value       = aws_iam_openid_connect_provider.oidc_provider.arn
+  value       = module.eks.oidc_provider_arn
 }
 
 # Fargate Profiles

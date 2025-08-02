@@ -78,5 +78,5 @@ output "fargate_profile_names" {
 # Kubeconfig
 output "kubeconfig_command" {
   description = "AWS CLI command to update kubeconfig"
-  value       = "aws eks update-kubeconfig --region ${var.aws_region} --name ${module.eks_cluster.cluster_id}"
+  value       = "aws eks update-kubeconfig --region ${var.aws_region} --name ${local.cluster_name}"
 }

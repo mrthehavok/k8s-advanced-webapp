@@ -8,17 +8,10 @@ This stack assumes that the S3 bucket and DynamoDB table for the Terraform remot
 
 ## Usage
 
-This is a root module designed to be deployed directly.
-
-```hcl
-# See terraform.tfvars.example for a full list of variables
-module "eks_fargate" {
-  source = "./"
-
-  environment = "dev"
-  aws_region  = "us-east-1"
-  # ... other variables
-}
+```bash
+terraform init
+terraform plan -var-file=envs/dev.tfvars
+terraform apply -var-file=envs/dev.tfvars
 ```
 
 ## Cost Considerations

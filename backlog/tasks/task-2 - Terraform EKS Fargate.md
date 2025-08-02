@@ -36,6 +36,7 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 - 2025-08-01 17:06: Pushed IRSA & Fargate phase branch and opened PR https://github.com/mrthehavok/k8s-advanced-webapp/pull/4
 
 - 2025-08-02 13:38: Phase-4: Added outputs for ALB Controller and cert-manager IRSA roles. Updated documentation.
+- 2025-08-02 14:11: Phase-5: Added dev/prod tfvars examples and successfully ran `terraform apply` in sandbox.
 
 ## Decisions Made
 
@@ -74,6 +75,9 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 - docs/terraform-eks-design.md (updated)
 - infra/terraform/eks-fargate/README.md (updated)
 - backlog/tasks/task-2 - Terraform EKS Fargate.md (updated)
+- infra/terraform/eks-fargate/envs/dev.tfvars (created)
+- infra/terraform/eks-fargate/envs/prod.tfvars (created)
+- infra/terraform/eks-fargate/README.md (updated)
 
 ## Blockers
 
