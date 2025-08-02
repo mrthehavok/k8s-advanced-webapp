@@ -253,3 +253,81 @@ async def test_note_repr():
     """Test the __repr__ method of the Note model."""
     note = models.Note(id=1, title="Test Note", content="Test content", created_at=datetime.now(), updated_at=datetime.now())
     assert repr(note) == f"<Note(id=1, title='Test Note')>"
+@pytest.mark.asyncio
+async def test_create_note_invalid_payload():
+    """Test creating a note with an invalid payload (missing title)."""
+    async with AsyncClient(app=app, base_url="http://test") as ac:
+        response = await ac.post("/notes/", json={"content": "This should fail"})
+        assert response.status_code == 422  # Unprocessable Entity
+
+@pytest.mark.asyncio
+async def test_create_note_long_title():
+    """Test creating a note with a title that exceeds the maximum length."""
+    long_title = "a" * 256
+    async with AsyncClient(app=app, base_url="http://test") as ac:
+        response = await ac.post("/notes/", json={"title": long_title, "content": "Test content"})
+        assert response.status_code == 422
+
+@pytest.mark.asyncio
+async def test_update_note_long_title():
+    """Test updating a note with a title that exceeds the maximum length."""
+    async with AsyncClient(app=app, base_url="http://test") as ac:
+        # Create a note
+        response = await ac.post("/notes/", json={"title": "Original", "content": "Content"})
+        note_id = response.json()["id"]
+
+        # Try to update with a long title
+        long_title = "a" * 256
+        response = await ac.put(f"/notes/{note_id}", json={"title": long_title})
+        assert response.status_code == 422
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "skip, limit, expected_total, expected_data_len, expected_first_title",
+    [
+        (0, 101, 3, 3, "Note 1"),   # limit > MAX_LIMIT_PER_PAGE
+        (10, 10, 3, 0, None),       # skip > total
+        (0, 0, 3, 0, None),         # limit = 0
+        (-1, 5, 3, 3, "Note 1"),    # skip < 0
+        (0, -1, 3, 3, "Note 1"),    # limit < 0
+    ],
+)
+async def test_read_notes_pagination_edge_cases(skip, limit, expected_total, expected_data_len, expected_first_title):
+    """Test pagination edge cases for reading notes."""
+    async with AsyncClient(app=app, base_url="http://test") as ac:
+        # Create 3 notes
+        await ac.post("/notes/", json={"title": "Note 1", "content": "Content 1"})
+        await ac.post("/notes/", json={"title": "Note 2", "content": "Content 2"})
+        await ac.post("/notes/", json={"title": "Note 3", "content": "Content 3"})
+
+        response = await ac.get(f"/notes/?skip={skip}&limit={limit}")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["total"] == expected_total
+        assert len(data["data"]) == expected_data_len
+        if expected_first_title:
+            assert data["data"][0]["title"] == expected_first_title
+@pytest.mark.asyncio
+async def test_db_create_tables():
+    """Test that the create_tables function runs without error."""
+    # This test mainly ensures the function can be called without raising an exception.
+    # The setup_database fixture already handles table creation and teardown.
+    try:
+        await db.create_tables()
+    except Exception as e:
+        pytest.fail(f"db.create_tables() raised an exception: {e}")
+
+from sqlalchemy.ext.asyncio import AsyncSession
+from async_generator import anext
+
+@pytest.mark.asyncio
+async def test_get_db_dependency():
+    """Test the get_db dependency injector."""
+    # The dependency is already overridden for all tests,
+    # but this test explicitly checks if it yields a session.
+    session_generator = db.get_db()
+    session = await anext(session_generator)
+    assert isinstance(session, AsyncSession)
+    # Ensure the generator is properly closed
+    with pytest.raises(StopAsyncIteration):
+        await anext(session_generator)

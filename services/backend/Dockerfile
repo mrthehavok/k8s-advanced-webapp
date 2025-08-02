@@ -1,6 +1,6 @@
 # [task-3]
 # ---- Builder Stage ----
-FROM python:3.12-slim as builder
+FROM python:3.12-alpine as builder
 
 # Set working directory
 WORKDIR /app
@@ -15,13 +15,18 @@ COPY pyproject.toml poetry.lock ./
 # --no-root: Don't install the project itself, only dependencies
 # --only main: Don't install development dependencies
 RUN poetry config virtualenvs.in-project true && \
-    poetry install --no-root --only main
+    poetry install --no-root --only main && \
+    rm -rf $(poetry config cache-dir)
 
 # ---- Final Stage ----
-FROM python:3.12-slim
+FROM python:3.12-alpine
 
 # Set working directory
 WORKDIR /app
+
+# Create a non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
 
 # Copy virtual environment from builder
 COPY --from=builder /app/.venv ./.venv
