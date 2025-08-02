@@ -1,6 +1,6 @@
 id: task-3
 title: "FastAPI backend service: CRUD notes, SQLite storage"
-status: "To Do"
+status: "In Progress"
 created: 2025-08-01
 updated: 2025-08-01
 
@@ -33,7 +33,7 @@ Implement the backend microservice for “Team Notes” using FastAPI:
 
 ## Session History
 
-<!-- Update as work progresses -->
+- 2025-08-02T14:20:39Z: Agent started work on [task-3].
 
 ## Decisions Made
 
@@ -41,7 +41,17 @@ Implement the backend microservice for “Team Notes” using FastAPI:
 
 ## Files Modified
 
-<!-- Track all file changes -->
+- `services/backend/pyproject.toml`
+- `services/backend/app/__init__.py`
+- `services/backend/app/main.py`
+- `services/backend/app/db.py`
+- `services/backend/app/models.py`
+- `services/backend/app/crud.py`
+- `services/backend/app/routers/notes.py`
+- `services/backend/tests/test_notes.py`
+- `services/backend/Dockerfile`
+- `services/backend/README.md`
+- `.github/workflows/backend-ci.yml`
 
 ## Blockers
 

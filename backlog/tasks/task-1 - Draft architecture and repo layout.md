@@ -1,6 +1,6 @@
 id: task-1
 title: "Draft architecture and repo layout"
-status: "In Progress"
+status: "Done"
 created: 2025-08-01
 updated: 2025-08-01
 

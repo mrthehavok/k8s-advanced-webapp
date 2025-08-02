@@ -1,6 +1,6 @@
 id: task-2
 title: "Terraform: EKS on Fargate with IAM/OIDC & cert-manager issuers"
-status: "In Progress"
+status: "Done"
 created: 2025-08-01
 updated: 2025-08-01
 
