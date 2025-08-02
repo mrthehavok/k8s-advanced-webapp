@@ -282,6 +282,24 @@ output "kubeconfig_command" {
 }
 ```
 
+output "alb_controller_service_account" {
+description = "IRSA service account details for the AWS Load Balancer Controller"
+value = {
+namespace = "kube-system"
+name = "aws-load-balancer-controller"
+role_arn = lookup(module.irsa.role_arns, "alb-controller", null)
+}
+}
+
+output "cert_manager_service_account" {
+description = "IRSA service account details for cert-manager"
+value = {
+namespace = "cert-manager"
+name = "cert-manager"
+role_arn = lookup(module.irsa.role_arns, "cert-manager", null)
+}
+}
+
 ## 5. Backend Configuration
 
 ### backend.tf
