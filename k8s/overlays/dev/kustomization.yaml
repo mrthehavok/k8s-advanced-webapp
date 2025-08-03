@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base/ingress-controller
+  - ../../base/cert-manager
+  - ../../base/tls
+
+patches:
+  - path: ingress-patches/aws-load-balancer-controller-helm-release-patch.yaml
+    target:
+      kind: HelmRelease
+      name: aws-load-balancer-controller
+      namespace: kube-system
+  - path: ingress-patches/cert-manager-helm-release-patch.yaml
+    target:
+      kind: HelmRelease
+      name: cert-manager
+      namespace: cert-manager
+  - path: ingress-patches/letsencrypt-staging-cluster-issuer-patch.yaml
+    target:
+      kind: ClusterIssuer
+      name: letsencrypt-staging
+  - path: ingress-patches/letsencrypt-prod-cluster-issuer-patch.yaml
+    target:
+      kind: ClusterIssuer
+      name: letsencrypt-prod
