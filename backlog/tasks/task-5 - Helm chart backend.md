@@ -1,6 +1,6 @@
 id: task-5
 title: "Helm chart: backend service"
-status: "In Progress"
+status: "Done"
 depends_on: ["task-3"]
 created: 2025-08-01
 updated: 2025-08-03
@@ -25,11 +25,11 @@ Chart requirements:
 
 ## Acceptance Criteria
 
-- [ ] Chart in `charts/backend/`
-- [ ] `helm lint` passes
-- [ ] `helm template` renders with default values
-- [ ] README with values table
-- [ ] Example `values-dev.yaml` used by Argo CD
+- [x] Chart in `charts/backend/`
+- [x] `helm lint` passes
+- [x] `helm template` renders with default values
+- [x] README with values table
+- [x] Example `values-dev.yaml` used by Argo CD
 
 ## Session History
 
@@ -37,6 +37,7 @@ Chart requirements:
 
 - 2025-08-03 09:10: Started backend Helm chart work; created feature branch.
 - 2025-08-03 09:23: Created all Helm chart files and updated CI workflow.
+- 2025-08-03 09:26: Helm chart scaffolded, lint added to CI; backlog closed.
 
 ## Decisions Made
 
@@ -59,6 +60,8 @@ Chart requirements:
 - `charts/backend/tests/values-lint.yaml` (created)
 - `charts/backend/.helmignore` (created)
 - `.github/workflows/backend-ci.yml` (modified)
+- `charts/backend/**`
+- `.github/workflows/backend-ci.yml`
 
 ## Blockers
 
