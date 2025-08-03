@@ -1,9 +1,9 @@
 id: task-5
 title: "Helm chart: backend service"
-status: "To Do"
+status: "Done"
 depends_on: ["task-3"]
 created: 2025-08-01
-updated: 2025-08-01
+updated: 2025-08-03
 
 ## Description
 
@@ -25,19 +25,21 @@ Chart requirements:
 
 ## Acceptance Criteria
 
-- [ ] Chart in `charts/backend/`
-- [ ] `helm lint` passes
-- [ ] `helm template` renders with default values
-- [ ] README with values table
-- [ ] Example `values-dev.yaml` used by Argo CD
+- [x] Chart in `charts/backend/`
+- [x] `helm lint` passes
+- [x] `helm template` renders with default values
+- [x] README with values table
+- [x] Example `values-dev.yaml` used by Argo CD
 
 ## Session History
 
-<!-- Update as work progresses -->
+- 2025-08-03 10:00: Completed all chart work and created PR.
 
 ## Decisions Made
 
 ## Files Modified
+
+- `charts/backend/**`
 
 ## Blockers
 
