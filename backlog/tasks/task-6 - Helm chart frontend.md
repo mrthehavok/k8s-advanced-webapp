@@ -1,6 +1,6 @@
 id: task-6
 title: "Helm chart: frontend SPA with HPA & Ingress"
-status: "In Progress"
+status: "Done"
 depends_on: ["task-4"]
 created: 2025-08-01
 updated: 2025-08-03
@@ -26,17 +26,18 @@ Chart requirements:
 
 ## Acceptance Criteria
 
-- [ ] Chart in `charts/frontend/`
-- [ ] `helm lint` passes
-- [ ] HPA template renders only when enabled
-- [ ] Example `values-dev.yaml` and `values-prod.yaml`
-- [ ] README with values table
+- [x] Chart in `charts/frontend/`
+- [x] `helm lint` passes
+- [x] HPA template renders only when enabled
+- [x] Example `values-dev.yaml` and `values-prod.yaml`
+- [x] README with values table
 
 ## Session History
 
 - 2025-08-03 10:05: Started frontend Helm chart work; created feature branch.
 - 2025-08-03 10:07: Completed frontend Helm chart design document.
 - 2025-08-03 10:26: Scaffolded Helm chart and created all templates.
+- 2025-08-03 10:38: Marked task as complete; all acceptance criteria met.
 
 ## Decisions Made
 
@@ -48,12 +49,26 @@ Chart requirements:
 ## Files Modified
 
 - `docs/frontend-helm-chart-design.md` (created)
-- `charts/frontend/**` (created)
+- `charts/frontend/Chart.yaml` (created)
+- `charts/frontend/values.yaml` (created)
+- `charts/frontend/values-dev.yaml` (created)
+- `charts/frontend/values-prod.yaml` (created)
+- `charts/frontend/README.md` (created)
+- `charts/frontend/.helmignore` (created)
+- `charts/frontend/templates/_helpers.tpl` (created)
+- `charts/frontend/templates/deployment.yaml` (created)
+- `charts/frontend/templates/service.yaml` (created)
+- `charts/frontend/templates/ingress.yaml` (created)
+- `charts/frontend/templates/hpa.yaml` (created)
+- `charts/frontend/templates/NOTES.txt` (created)
 - `.github/workflows/frontend-ci.yml` (created)
 
 ## Blockers
 
+None - all work completed successfully.
+
 ## Next Steps
 
-- Scaffold with `helm create`
-- Add Ingress & HPA templates
+- Deploy to dev environment for testing
+- Configure cert-manager and ingress controller (task-7)
+- Integrate with Argo CD for GitOps deployment (task-9)
