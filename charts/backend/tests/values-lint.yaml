@@ -1,0 +1,3 @@
+# Minimal values for linting and testing
+image:
+  repository: "test"

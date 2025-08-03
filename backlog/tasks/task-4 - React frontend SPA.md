@@ -36,6 +36,8 @@ Develop a lightweight React single-page application for “Team Notes”:
 - 2025-08-03 07:26: Frontend completed, tests & CI passing; backlog closed.
 - 2025-08-03 07:33: Updated CI workflows (drop backend Codecov, push frontend image to GHCR).
 
+- 2025-08-03 09:10: Verified task completion while starting task-5.
+
 ## Decisions Made
 
 - Used Vite for React app scaffolding (fast build times)
