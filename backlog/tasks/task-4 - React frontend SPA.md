@@ -1,8 +1,8 @@
 id: task-4
 title: "React frontend SPA: Team Notes UI"
-status: "To Do"
+status: "In Progress"
 created: 2025-08-01
-updated: 2025-08-01
+updated: 2025-08-03
 
 ## Description
 
@@ -31,6 +31,8 @@ Develop a lightweight React single-page application for “Team Notes”:
 ## Session History
 
 <!-- Update as work progresses -->
+
+- 2025-08-03 07:04: Started task; created feature branch.
 
 ## Decisions Made
 
