@@ -34,6 +34,7 @@ Develop a lightweight React single-page application for “Team Notes”:
 
 - 2025-08-03 07:04: Started task; created feature branch.
 - 2025-08-03 07:26: Frontend completed, tests & CI passing; backlog closed.
+- 2025-08-03 07:33: Updated CI workflows (drop backend Codecov, push frontend image to GHCR).
 
 ## Decisions Made
 
@@ -60,6 +61,8 @@ Develop a lightweight React single-page application for “Team Notes”:
 - services/frontend/src/**tests**/App.test.jsx (created)
 - services/frontend/**mocks**/styleMock.js (created)
 - .github/workflows/frontend-ci.yml (created)
+- .github/workflows/backend-ci.yml
+- .github/workflows/frontend-ci.yml
 
 ## Blockers
 
