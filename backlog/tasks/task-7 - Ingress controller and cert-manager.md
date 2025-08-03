@@ -17,15 +17,19 @@ Provision ingress and TLS stack:
 
 ## Acceptance Criteria
 
-- [ ] Helm chart definitions committed
-- [ ] ClusterIssuer YAML manifests in `k8s/base/tls/`
+- [x] Helm chart definitions committed
+- [x] ClusterIssuer YAML manifests in `k8s/base/tls/`
 - [ ] Documentation on DNS and ACM prerequisites
 - [ ] Verified certificate issuance in dev namespace
 
 ## Session History
 
-- 2025-08-03 10:36: Started work on task-7, creating implementation plan and design notes
-- 2025-08-03 10:36: Branch creation planned: feat/task-7-ingress
+- 2025-08-03 10:36: Started work on task-7, creating implementation plan and design notes.
+- 2025-08-03 10:40: Created branch `feat/task-7-ingress`.
+- 2025-08-03 10:40: Committed design notes to backlog.
+- 2025-08-03 10:45: Created base Kubernetes manifests for ingress controller, cert-manager, and TLS issuers.
+- 2025-08-03 10:45: Updated frontend Helm chart with ingress annotations.
+- 2025-08-03 10:45: Committed all new manifests and chart changes.
 
 ## Decisions Made
 
@@ -266,7 +270,17 @@ k8s/
 
 ## Files Modified
 
-- backlog/tasks/task-7 - Ingress controller and cert-manager.md (this file)
+- `backlog/tasks/task-7 - Ingress controller and cert-manager.md` (this file)
+- `k8s/base/ingress-controller/namespace.yaml` (created)
+- `k8s/base/ingress-controller/helm-release.yaml` (created)
+- `k8s/base/ingress-controller/kustomization.yaml` (created)
+- `k8s/base/cert-manager/namespace.yaml` (created)
+- `k8s/base/cert-manager/helm-release.yaml` (created)
+- `k8s/base/cert-manager/kustomization.yaml` (created)
+- `k8s/base/tls/letsencrypt-staging.yaml` (created)
+- `k8s/base/tls/letsencrypt-prod.yaml` (created)
+- `k8s/base/tls/kustomization.yaml` (created)
+- `charts/frontend/values.yaml` (modified)
 
 ## Blockers
 
@@ -274,9 +288,7 @@ None at this time. IRSA policies are already defined in Terraform modules.
 
 ## Next Steps
 
-- Create Helm release definitions for AWS Load Balancer Controller
-- Create Helm release definitions for cert-manager
-- Create ClusterIssuer manifests
-- Create test ingress for validation
-- Document DNS prerequisites and domain setup
-- Test with staging issuer before production
+- Create overlays for `dev` and `prod` environments to patch in environment-specific values (cluster name, region, VPC ID, IRSA role ARNs).
+- Deploy the base manifests to the `dev` environment using Argo CD.
+- Validate the deployment and certificate issuance with a test Ingress.
+- Document the DNS prerequisites and domain setup.
