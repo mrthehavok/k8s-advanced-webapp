@@ -1,9 +1,9 @@
 id: task-5
 title: "Helm chart: backend service"
-status: "To Do"
+status: "In Progress"
 depends_on: ["task-3"]
 created: 2025-08-01
-updated: 2025-08-01
+updated: 2025-08-03
 
 ## Description
 
@@ -34,6 +34,8 @@ Chart requirements:
 ## Session History
 
 <!-- Update as work progresses -->
+
+- 2025-08-03 09:10: Started backend Helm chart work; created feature branch.
 
 ## Decisions Made
 
