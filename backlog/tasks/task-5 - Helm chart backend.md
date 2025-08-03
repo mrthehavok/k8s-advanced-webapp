@@ -60,8 +60,6 @@ Chart requirements:
 - `charts/backend/tests/values-lint.yaml` (created)
 - `charts/backend/.helmignore` (created)
 - `.github/workflows/backend-ci.yml` (modified)
-- `charts/backend/**`
-- `.github/workflows/backend-ci.yml`
 
 ## Blockers
 
