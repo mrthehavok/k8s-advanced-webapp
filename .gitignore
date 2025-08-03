@@ -61,3 +61,12 @@ htmlcov/
 
 # Coverage reports
 .coverage
+
+# Node / Frontend
+services/frontend/node_modules/
+services/frontend/dist/
+services/frontend/.DS_Store
+services/frontend/npm-debug.log*
+services/frontend/yarn-debug.log*
+services/frontend/yarn-error.log*
+services/frontend/coverage/

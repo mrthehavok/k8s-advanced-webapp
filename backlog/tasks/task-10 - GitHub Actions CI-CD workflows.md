@@ -43,6 +43,8 @@ Create GitHub Actions workflows to automate CI and CD:
 
 ## Session History
 
+- 2025-08-03 07:33: Backend Codecov removed; frontend image push to GHCR implemented (task-4 follow-up).
+
 ## Decisions Made
 
 ## Files Modified
@@ -53,3 +55,4 @@ Create GitHub Actions workflows to automate CI and CD:
 
 - Author workflow YAMLs
 - Test in sandbox repository
+- Add Helm release update automation for backend & frontend images.
