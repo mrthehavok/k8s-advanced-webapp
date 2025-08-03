@@ -6,20 +6,20 @@ on:
     branches: [main]
     paths:
       - "services/backend/**"
+      - "charts/backend/**"
   pull_request:
     branches: [main]
     paths:
       - "services/backend/**"
+      - "charts/backend/**"
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./services/backend
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -27,10 +27,17 @@ jobs:
           python-version: "3.12"
 
       - name: Install Poetry
+        working-directory: ./services/backend
         run: pip install poetry
 
       - name: Install dependencies
+        working-directory: ./services/backend
         run: poetry install
 
+      - name: Lint Helm chart
+        uses: helm/kind-action@v1.10.0
+      - run: helm lint charts/backend
+
       - name: Run tests with coverage
+        working-directory: ./services/backend
         run: poetry run pytest --cov=app --cov-report=term-missing

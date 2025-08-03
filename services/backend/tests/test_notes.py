@@ -5,7 +5,7 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.pool import StaticPool
 from app.main import app
-from app import crud, models
+from app import crud, models, db
 from app.db import get_db, Base
 
 # Use an in-memory SQLite database for testing
@@ -318,7 +318,6 @@ async def test_db_create_tables():
         pytest.fail(f"db.create_tables() raised an exception: {e}")
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from async_generator import anext
 
 @pytest.mark.asyncio
 async def test_get_db_dependency():
