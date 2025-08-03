@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: { { include "backend.fullname" . } }
-  labels: { { - include "backend.labels" . | nindent 4 } }
+  name: {{ include "backend.fullname" . }}
+  labels: {{- include "backend.labels" . | nindent 4 }}
 data:
   DB_PATH: "/data/notes.db"
   LOG_LEVEL: "info"

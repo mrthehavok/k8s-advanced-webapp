@@ -1,10 +1,10 @@
 {{- .Chart.Name }} has been installed.
 
 Get the application URL by running these commands:
-{{- if .Values.service.type == "LoadBalancer" }}
+{{- if eq .Values.service.type "LoadBalancer" }}
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "backend.fullname" . }} --template "{{ range .status.loadBalancer.ingress }}{{ .ip }}{{ end }}")
   echo "http://${SERVICE_IP}:{{ .Values.service.port }}"
-{{- else if .Values.service.type == "NodePort" }}
+{{- else if eq .Values.service.type "NodePort" }}
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "backend.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo "http://$NODE_IP:$NODE_PORT"
