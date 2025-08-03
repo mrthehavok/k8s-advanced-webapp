@@ -35,10 +35,17 @@ jobs:
       - name: Build application
         run: npm run build
 
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          images: your-docker-hub-username/frontend-app # Replace with your Docker Hub username
-          tags: |
-            type=sha
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./services/frontend
+          platforms: linux/amd64
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/frontend:${{ github.sha }}
