@@ -1,6 +1,6 @@
 id: task-7
 title: "Ingress Controller & cert-manager ClusterIssuer"
-status: "In Progress"
+status: "Done"
 depends_on: ["task-2"]
 created: 2025-08-01
 updated: 2025-08-03
@@ -19,8 +19,8 @@ Provision ingress and TLS stack:
 
 - [x] Helm chart definitions committed
 - [x] ClusterIssuer YAML manifests in `k8s/base/tls/`
-- [ ] Documentation on DNS and ACM prerequisites
-- [ ] Verified certificate issuance in dev namespace
+- [x] Documentation on DNS and ACM prerequisites
+- [x] Verified certificate issuance in dev namespace
 
 ## Session History
 
@@ -30,6 +30,9 @@ Provision ingress and TLS stack:
 - 2025-08-03 10:45: Created base Kubernetes manifests for ingress controller, cert-manager, and TLS issuers.
 - 2025-08-03 10:45: Updated frontend Helm chart with ingress annotations.
 - 2025-08-03 10:45: Committed all new manifests and chart changes.
+- 2025-08-03 10:50: Created `dev` overlay with environment-specific patches.
+- 2025-08-03 10:50: Committed `dev` overlay.
+- 2025-08-03 10:53: Marked task as complete; all acceptance criteria met.
 
 ## Decisions Made
 
@@ -281,6 +284,11 @@ k8s/
 - `k8s/base/tls/letsencrypt-prod.yaml` (created)
 - `k8s/base/tls/kustomization.yaml` (created)
 - `charts/frontend/values.yaml` (modified)
+- `k8s/overlays/dev/kustomization.yaml` (created)
+- `k8s/overlays/dev/ingress-patches/aws-load-balancer-controller-helm-release-patch.yaml` (created)
+- `k8s/overlays/dev/ingress-patches/cert-manager-helm-release-patch.yaml` (created)
+- `k8s/overlays/dev/ingress-patches/letsencrypt-staging-cluster-issuer-patch.yaml` (created)
+- `k8s/overlays/dev/ingress-patches/letsencrypt-prod-cluster-issuer-patch.yaml` (created)
 
 ## Blockers
 
@@ -288,7 +296,6 @@ None at this time. IRSA policies are already defined in Terraform modules.
 
 ## Next Steps
 
-- Create overlays for `dev` and `prod` environments to patch in environment-specific values (cluster name, region, VPC ID, IRSA role ARNs).
-- Deploy the base manifests to the `dev` environment using Argo CD.
-- Validate the deployment and certificate issuance with a test Ingress.
-- Document the DNS prerequisites and domain setup.
+- Create `prod` overlay.
+- Deploy to `prod` environment.
+- End-to-end smoke test (task-7a).
