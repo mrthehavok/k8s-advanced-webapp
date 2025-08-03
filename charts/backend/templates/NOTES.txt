@@ -1,0 +1,18 @@
+{{- .Chart.Name }} has been installed.
+
+Get the application URL by running these commands:
+{{- if .Values.service.type == "LoadBalancer" }}
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "backend.fullname" . }} --template "{{ range .status.loadBalancer.ingress }}{{ .ip }}{{ end }}")
+  echo "http://${SERVICE_IP}:{{ .Values.service.port }}"
+{{- else if .Values.service.type == "NodePort" }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "backend.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "http://$NODE_IP:$NODE_PORT"
+{{- else }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "backend.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:{{ .Values.service.port }}
+{{- end }}
+
+You can override values in this chart by creating your own values.yaml file and using the -f flag:
+  helm upgrade --install {{ .Release.Name }} {{ .Chart.Name }} -f my-values.yaml
