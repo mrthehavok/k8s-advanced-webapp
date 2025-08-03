@@ -1,0 +1,22 @@
+# Patterns to ignore when packaging Helm charts.
+# This is similar to .gitignore.
+
+.DS_Store
+# Common VCS folders
+.git/
+.gitignore
+.bzr/
+.bzrignore
+.hg/
+.hgignore
+.svn/
+# Common backup files
+*.swp
+*.bak
+*.tmp
+*~
+# Various IDEs
+.project
+.idea/
+*.tmproj
+.vscode/

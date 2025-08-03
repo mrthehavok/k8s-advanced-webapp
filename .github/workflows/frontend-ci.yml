@@ -1,4 +1,4 @@
-# [task-4]
+# [task-6]
 name: Frontend CI
 
 on:
@@ -6,46 +6,25 @@ on:
     branches: [main]
     paths:
       - "services/frontend/**"
+      - "charts/frontend/**"
   pull_request:
     branches: [main]
     paths:
       - "services/frontend/**"
+      - "charts/frontend/**"
 
 jobs:
-  build:
+  lint-chart:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./services/frontend
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
         with:
-          node-version: 20
+          version: v3.12.0
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        run: npm test
-
-      - name: Build application
-        run: npm run build
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./services/frontend
-          platforms: linux/amd64
-          push: true
-          tags: ghcr.io/${{ github.repository_owner }}/frontend:${{ github.sha }}
+      - name: Lint frontend Helm chart
+        run: |
+          helm lint charts/frontend
+          helm lint charts/frontend -f charts/frontend/values-dev.yaml
+          helm lint charts/frontend -f charts/frontend/values-prod.yaml
