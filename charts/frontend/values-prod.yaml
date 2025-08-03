@@ -1,0 +1,18 @@
+# Production values for frontend.
+replicaCount: 3
+
+ingress:
+  hosts:
+    - host: team-notes.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: frontend-tls-prod
+      hosts:
+        - team-notes.example.com
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10

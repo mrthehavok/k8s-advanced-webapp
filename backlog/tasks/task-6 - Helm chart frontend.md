@@ -35,12 +35,21 @@ Chart requirements:
 ## Session History
 
 - 2025-08-03 10:05: Started frontend Helm chart work; created feature branch.
+- 2025-08-03 10:07: Completed frontend Helm chart design document.
+- 2025-08-03 10:26: Scaffolded Helm chart and created all templates.
 
 ## Decisions Made
 
+- Created comprehensive design document covering chart structure, values schema, and implementation patterns
+- Decided to use conditional HPA rendering based on `.Values.autoscaling.enabled`
+- Planned for optional ConfigMap to support runtime configuration
+- Designed for ALB Ingress with cert-manager TLS integration
+
 ## Files Modified
 
-- `charts/frontend/**` (pending)
+- `docs/frontend-helm-chart-design.md` (created)
+- `charts/frontend/**` (created)
+- `.github/workflows/frontend-ci.yml` (created)
 
 ## Blockers
 
