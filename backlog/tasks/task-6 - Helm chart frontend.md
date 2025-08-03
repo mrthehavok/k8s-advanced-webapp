@@ -1,9 +1,9 @@
 id: task-6
 title: "Helm chart: frontend SPA with HPA & Ingress"
-status: "To Do"
+status: "In Progress"
 depends_on: ["task-4"]
 created: 2025-08-01
-updated: 2025-08-01
+updated: 2025-08-03
 
 ## Description
 
@@ -34,9 +34,13 @@ Chart requirements:
 
 ## Session History
 
+- 2025-08-03 10:05: Started frontend Helm chart work; created feature branch.
+
 ## Decisions Made
 
 ## Files Modified
+
+- `charts/frontend/**` (pending)
 
 ## Blockers
 
