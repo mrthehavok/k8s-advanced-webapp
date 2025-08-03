@@ -1,0 +1,42 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: aws-load-balancer-controller
+  namespace: kube-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: aws-load-balancer-controller
+      version: "1.7.1" # Use a specific version for reproducibility
+      sourceRef:
+        kind: HelmRepository
+        name: aws-ebs-csi-driver
+        namespace: flux-system
+      interval: 15m
+  releaseName: aws-load-balancer-controller
+  values:
+    clusterName: # To be patched by overlay
+    region: # To be patched by overlay
+    vpcId: # To be patched by overlay
+
+    serviceAccount:
+      create: true
+      name: aws-load-balancer-controller
+      annotations: {} # To be patched by overlay with IRSA role
+
+    # Fargate-specific settings
+    enableShield: false
+    enableWaf: false
+    enableWafv2: false
+
+    # Resource limits for Fargate
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi

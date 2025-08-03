@@ -15,9 +15,18 @@ ingress:
   enabled: true
   className: alb
   annotations:
+    # ALB configuration
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /
+
+    # cert-manager integration
     cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/acme-challenge-type: dns01
+
+    # SSL configuration
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
   hosts:
     - host: team-notes.example.com
       paths:
