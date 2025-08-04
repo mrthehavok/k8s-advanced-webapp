@@ -49,7 +49,6 @@ venv/
 .venv/
 
 # Poetry
-poetry.lock
 
 # Database
 notes.db
