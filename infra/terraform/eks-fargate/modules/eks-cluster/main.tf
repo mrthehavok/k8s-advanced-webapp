@@ -13,6 +13,7 @@ module "eks" {
   endpoint_private_access = var.cluster_endpoint_private_access
   endpoint_public_access  = var.cluster_endpoint_public_access
 
+
   # Fargate Profiles
   fargate_profiles = {
     for k, v in var.fargate_profiles : k => {

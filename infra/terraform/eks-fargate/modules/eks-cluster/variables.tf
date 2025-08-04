@@ -51,3 +51,4 @@ variable "fargate_profiles" {
     subnet_ids         = list(string)
   }))
 }
+
