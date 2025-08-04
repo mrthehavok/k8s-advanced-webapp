@@ -10,7 +10,7 @@ global:
 image:
   # IMPORTANT: CI or ArgoCD image-updater will manage this tag automatically.
   # Keep this value stable for baseline deployments.
-  repository: "ghcr.io/{{ .Values.global.repositoryOwner }}/k8s-advanced-webapp-backend"
+  repository: "k8s-advanced-webapp-backend"
   tag: "latest"
   pullPolicy: IfNotPresent
 
@@ -59,9 +59,9 @@ env:
 # Persistence configuration
 persistence:
   enabled: false
-  # storageClass: "-"
-  # accessMode: ReadWriteOnce
-  # size: 1Gi
+  storageClass: ""
+  accessMode:
+  size:
 
 # Horizontal Pod Autoscaler configuration
 # https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/

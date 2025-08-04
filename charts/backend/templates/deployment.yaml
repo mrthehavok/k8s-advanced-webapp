@@ -14,10 +14,12 @@ spec:
       labels:
         {{- include "backend.selectorLabels" . | nindent 8 }}
     spec:
+      imagePullSecrets:
+        - name: ghcr-credentials
       serviceAccountName: {{ include "backend.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "ghcr.io/{{ .Values.global.repositoryOwner }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -34,14 +36,9 @@ spec:
                 name: {{ include "backend.fullname" . }}
           env:
             {{- toYaml .Values.env | nindent 12 }}
-          {{- if .Values.persistence.enabled }}
           volumeMounts:
             - name: data
               mountPath: /data
-          {{- end }}
-      {{- if .Values.persistence.enabled }}
       volumes:
         - name: data
-          persistentVolumeClaim:
-            claimName: {{ include "backend.fullname" . }}
-      {{- end }}
+          emptyDir: {}

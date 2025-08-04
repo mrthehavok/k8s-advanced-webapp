@@ -8,7 +8,7 @@ image:
   # The <OWNER> placeholder is replaced by the CI/CD pipeline with the actual GitHub repository owner.
   # The image tag is updated by the image-updater component in the cluster, which tracks the latest
   # container image digest from the repository.
-  repository: "ghcr.io/{{ .Values.global.repositoryOwner }}/k8s-advanced-webapp-frontend"
+  repository: "k8s-advanced-webapp-frontend"
   tag: latest
   pullPolicy: IfNotPresent
 
