@@ -16,12 +16,21 @@ After Helm charts for the backend (task-6) and frontend (task-7) are packaged, d
 - [ ] `curl https://<domain>/api/health` returns `{"status":"ok"}`
 - [ ] Frontend URL shows notes list and CRUD operations work end-to-end
 - [ ] CI job outputs deployment logs and marks pipeline green on success
+- [ ] Backend image automatically built & pushed to GitHub Container Registry by CI workflow
+- [ ] Frontend image automatically built & pushed to GitHub Container Registry by CI workflow
+- [ ] Kubernetes dev namespace runs the _latest_ images produced by CI/CD (verified by tag or digest)
 
 ## Session History
 
 - 2025-08-04 13:46: Started smoke-test deployment; created feature branch.
+- 2025-08-04 16:40: Clean Terraform plan achieved; helm releases deployed
+- 2025-08-04 16:48: Backend pod `ImagePullBackOff` due to missing image; manual docker build failed to push (Docker Hub auth)
+- 2025-08-04 16:51: Decided to switch to GHCR and implement automated build workflows for backend & frontend images
 
 ## Decisions Made
+
+- Use GitHub Container Registry (ghcr.io) for all service images
+- Standardise image tags as `main-<SHA>` plus `latest`
 
 ### Smoke Test Deployment Plan
 
@@ -81,6 +90,9 @@ The deployment will be considered successful if:
 ## Files Modified
 
 <!-- Track all file changes -->
+
+- .github/workflows/backend-ci.yml (added)
+- .github/workflows/frontend-ci.yml (updated)
 
 ## Blockers
 
