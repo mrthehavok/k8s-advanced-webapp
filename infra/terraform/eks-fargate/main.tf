@@ -1,16 +1,26 @@
-provider "kubernetes" {
-  host                   = module.eks_cluster.cluster_endpoint
-  cluster_ca_certificate = base64decode(module.eks_cluster.cluster_certificate_authority_data)
-
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    command     = "aws"
-    args        = ["eks", "get-token", "--cluster-name", module.eks_cluster.cluster_id]
-  }
-}
-
 locals {
   cluster_name = "${var.project_name}-${var.environment}"
+}
+
+# Data source to get the existing EKS cluster (if it exists)
+data "aws_eks_cluster" "cluster" {
+  name = local.cluster_name
+
+  depends_on = [module.eks_cluster]
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = local.cluster_name
+
+  depends_on = [module.eks_cluster]
+}
+
+# Kubernetes provider configuration depends on EKS cluster outputs
+# This ensures the provider is configured only after the cluster exists
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
 }
 
 data "aws_availability_zones" "available" {
@@ -57,3 +67,5 @@ module "irsa" {
   environment       = var.environment
   tags              = var.tags
 }
+
+
