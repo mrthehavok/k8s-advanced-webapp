@@ -36,6 +36,8 @@ output "oidc_provider_arn" {
 }
 
 # Fargate Profiles
+
+# Fargate Profiles
 output "fargate_profile_names" {
   description = "Names of Fargate profiles configured for the cluster"
   value       = keys(var.fargate_profiles)
