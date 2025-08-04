@@ -4,10 +4,13 @@
 
 replicaCount: 1
 
+global:
+  repositoryOwner: mrthehavok
+
 image:
   # IMPORTANT: CI or ArgoCD image-updater will manage this tag automatically.
   # Keep this value stable for baseline deployments.
-  repository: "ghcr.io/${GITHUB_REPOSITORY_OWNER}/k8s-advanced-webapp-backend"
+  repository: "ghcr.io/{{ .Values.global.repositoryOwner }}/k8s-advanced-webapp-backend"
   tag: "latest"
   pullPolicy: IfNotPresent
 
