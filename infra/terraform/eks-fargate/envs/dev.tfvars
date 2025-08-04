@@ -5,7 +5,7 @@ aws_region = "eu-west-1"
 environment = "dev"
 
 # Project name
-project_name = "team-notes-dev"
+project_name = "team-notes"
 
 # VPC CIDR block
 vpc_cidr = "10.10.0.0/16"

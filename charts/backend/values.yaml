@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  # repository: my-repo/backend
+  repository: "idmitriev/k8s-advanced-webapp-backend"
   tag: "latest"
   pullPolicy: IfNotPresent
 
