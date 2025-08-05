@@ -19,18 +19,12 @@ graph TB
         end
 
         subgraph "EKS Fargate Cluster"
-            subgraph "cert-manager namespace"
-                CM[cert-manager]
-                ACME[Let's Encrypt ACME]
-            end
-
             subgraph "argocd namespace"
                 ARGO[Argo CD]
                 APPSET[ApplicationSet Controller]
             end
 
             subgraph "dev namespace"
-                ALB[ALB Ingress Controller]
                 FE[Frontend Service]
                 BE[Backend Service]
                 ING[Ingress Resource]
@@ -64,13 +58,9 @@ graph TB
     ARGO -->|deploy| ING
     ARGO -->|deploy| PROM
 
-    DNS --> ALB
-    ALB --> ING
+    DNS --> ING
     ING --> FE
     ING --> BE
-
-    CM --> ACME
-    CM -->|certificates| ING
 
     PROM --> KSM
     PROM --> FE
@@ -94,7 +84,6 @@ graph TB
 
 - `dev`: Application workloads (frontend, backend)
 - `monitoring`: Observability stack (Prometheus, Grafana)
-- `cert-manager`: TLS certificate management
 - `argocd`: GitOps continuous deployment
 
 ### Application Layer
@@ -115,19 +104,10 @@ graph TB
 
 ### Networking & Security
 
-**ALB Ingress Controller**
+**AWS ALB Ingress**
 
-- AWS Application Load Balancer integration
-- Path-based routing to services
-- SSL/TLS termination at load balancer
-- Health check configuration
-
-**cert-manager**
-
-- Automated TLS certificate provisioning
-- Let's Encrypt ACME integration
-- Certificate renewal automation
-- Wildcard certificate support
+- Ingress is handled directly by the AWS Application Load Balancer, provisioned via Terraform.
+- The Kubernetes `Ingress` resource is configured with annotations that the EKS control plane uses to configure the ALB.
 
 ### Observability Stack
 
@@ -301,3 +281,15 @@ spec:
 - Route 53 health checks
 - Cross-region replication
 - Failover procedures
+
+## Deployment
+
+### Bootstrap Argo CD
+
+To bootstrap the GitOps process, apply the Argo CD installation manifest:
+
+```bash
+kubectl apply -f gitops/argocd/install.yaml
+```
+
+This will provision Argo CD in the `argocd` namespace. The `install.yaml` manifest configures the Argo CD server service with type `LoadBalancer`, which will provision an AWS Application Load Balancer. This provides a public DNS endpoint, but it is configured for HTTP only at this stage.

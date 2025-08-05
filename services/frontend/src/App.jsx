@@ -107,7 +107,7 @@ function App() {
   return (
     <div className={`App ${theme}`}>
       <header className="app-header">
-        <h1>Notes - {process.env.VITE_APP_VERSION || "dev"}</h1>
+        <h1>Notes - {import.meta.env.VITE_APP_VERSION || "v0.3.0"}</h1>
         <ThemeToggle />
       </header>
 

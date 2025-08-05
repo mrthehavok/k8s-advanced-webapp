@@ -35,8 +35,6 @@ infra/terraform/eks-fargate/
 │       ├── variables.tf
 │       ├── outputs.tf
 │       ├── policies/         # Policy documents
-│       │   ├── alb-controller.json
-│       │   ├── cert-manager.json
 │       │   └── external-dns.json
 │       └── versions.tf
 │
@@ -157,11 +155,6 @@ variable "fargate_profiles" {
       labels            = {}
       subnet_ids        = []
     }
-    cert-manager = {
-      namespace_patterns = ["cert-manager"]
-      labels            = {}
-      subnet_ids        = []
-    }
     argocd = {
       namespace_patterns = ["argocd"]
       labels            = {}
@@ -185,16 +178,6 @@ variable "irsa_configs" {
     policy_arns         = list(string)
   }))
   default = {
-    alb-controller = {
-      namespace            = "kube-system"
-      service_account_name = "aws-load-balancer-controller"
-      policy_arns         = [] # Will be created by module
-    }
-    cert-manager = {
-      namespace            = "cert-manager"
-      service_account_name = "cert-manager"
-      policy_arns         = []
-    }
     external-dns = {
       namespace            = "kube-system"
       service_account_name = "external-dns"
@@ -282,24 +265,6 @@ output "kubeconfig_command" {
 }
 ```
 
-output "alb_controller_service_account" {
-description = "IRSA service account details for the AWS Load Balancer Controller"
-value = {
-namespace = "kube-system"
-name = "aws-load-balancer-controller"
-role_arn = lookup(module.irsa.role_arns, "alb-controller", null)
-}
-}
-
-output "cert_manager_service_account" {
-description = "IRSA service account details for cert-manager"
-value = {
-namespace = "cert-manager"
-name = "cert-manager"
-role_arn = lookup(module.irsa.role_arns, "cert-manager", null)
-}
-}
-
 ## 5. Backend Configuration
 
 ### backend.tf
@@ -386,148 +351,7 @@ provider "kubernetes" {
 
 ## 7. IAM Policies for IRSA
 
-### 7.1 ALB Controller Policy
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": ["iam:CreateServiceLinkedRole"],
-      "Resource": "*",
-      "Condition": {
-        "StringEquals": {
-          "iam:AWSServiceName": "elasticloadbalancing.amazonaws.com"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DescribeAccountAttributes",
-        "ec2:DescribeAddresses",
-        "ec2:DescribeAvailabilityZones",
-        "ec2:DescribeInternetGateways",
-        "ec2:DescribeVpcs",
-        "ec2:DescribeVpcPeeringConnections",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeInstances",
-        "ec2:DescribeNetworkInterfaces",
-        "ec2:DescribeTags",
-        "ec2:GetCoipPoolUsage",
-        "ec2:DescribeCoipPools",
-        "elasticloadbalancing:DescribeLoadBalancers",
-        "elasticloadbalancing:DescribeLoadBalancerAttributes",
-        "elasticloadbalancing:DescribeListeners",
-        "elasticloadbalancing:DescribeListenerCertificates",
-        "elasticloadbalancing:DescribeSSLPolicies",
-        "elasticloadbalancing:DescribeRules",
-        "elasticloadbalancing:DescribeTargetGroups",
-        "elasticloadbalancing:DescribeTargetGroupAttributes",
-        "elasticloadbalancing:DescribeTargetHealth",
-        "elasticloadbalancing:DescribeTags"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "cognito-idp:DescribeUserPoolClient",
-        "acm:ListCertificates",
-        "acm:DescribeCertificate",
-        "iam:ListServerCertificates",
-        "iam:GetServerCertificate",
-        "waf-regional:GetWebACL",
-        "waf-regional:GetWebACLForResource",
-        "waf-regional:AssociateWebACL",
-        "waf-regional:DisassociateWebACL",
-        "wafv2:GetWebACL",
-        "wafv2:GetWebACLForResource",
-        "wafv2:AssociateWebACL",
-        "wafv2:DisassociateWebACL",
-        "shield:GetSubscriptionState",
-        "shield:DescribeProtection",
-        "shield:CreateProtection",
-        "shield:DeleteProtection"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:AuthorizeSecurityGroupIngress",
-        "ec2:RevokeSecurityGroupIngress",
-        "ec2:CreateSecurityGroup",
-        "ec2:CreateTags",
-        "ec2:DeleteTags",
-        "ec2:DeleteSecurityGroup"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "elasticloadbalancing:CreateLoadBalancer",
-        "elasticloadbalancing:CreateTargetGroup",
-        "elasticloadbalancing:CreateListener",
-        "elasticloadbalancing:DeleteListener",
-        "elasticloadbalancing:CreateRule",
-        "elasticloadbalancing:DeleteRule",
-        "elasticloadbalancing:AddTags",
-        "elasticloadbalancing:RemoveTags",
-        "elasticloadbalancing:ModifyLoadBalancerAttributes",
-        "elasticloadbalancing:SetIpAddressType",
-        "elasticloadbalancing:SetSecurityGroups",
-        "elasticloadbalancing:SetSubnets",
-        "elasticloadbalancing:DeleteLoadBalancer",
-        "elasticloadbalancing:ModifyTargetGroup",
-        "elasticloadbalancing:ModifyTargetGroupAttributes",
-        "elasticloadbalancing:DeleteTargetGroup",
-        "elasticloadbalancing:RegisterTargets",
-        "elasticloadbalancing:DeregisterTargets",
-        "elasticloadbalancing:SetWebAcl",
-        "elasticloadbalancing:ModifyListener",
-        "elasticloadbalancing:AddListenerCertificates",
-        "elasticloadbalancing:RemoveListenerCertificates",
-        "elasticloadbalancing:ModifyRule"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
-
-### 7.2 Cert-Manager Policy
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": ["route53:GetChange"],
-      "Resource": "arn:aws:route53:::change/*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "route53:ChangeResourceRecordSets",
-        "route53:ListResourceRecordSets"
-      ],
-      "Resource": "arn:aws:route53:::hostedzone/*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": ["route53:ListHostedZonesByName"],
-      "Resource": "*"
-    }
-  ]
-}
-```
-
-### 7.3 External-DNS Policy
+### 7.1 External-DNS Policy
 
 ```json
 {
@@ -562,22 +386,12 @@ The following components will depend on outputs from this Terraform module:
    - Will need: `cluster_endpoint`, `cluster_certificate_authority_data`
    - IRSA role ARNs for service account annotations
 
-2. **ALB Ingress Controller** (Task 7)
-
-   - Will need: `irsa_role_arns["alb-controller"]`
-   - VPC and subnet information for ingress configuration
-
-3. **Cert-Manager** (Task 7)
-
-   - Will need: `irsa_role_arns["cert-manager"]`
-   - Route53 hosted zone information (passed separately)
-
-4. **Monitoring Stack** (Task 8)
+2. **Monitoring Stack** (Task 8)
 
    - Will need: Fargate profile for monitoring namespace
    - Security group rules for metrics collection
 
-5. **Argo CD** (Task 9)
+3. **Argo CD** (Task 9)
    - Will need: Fargate profile for argocd namespace
    - Cluster access configuration
 
