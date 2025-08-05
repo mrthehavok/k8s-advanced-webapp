@@ -18,7 +18,7 @@ describe("App component", () => {
   test("renders loading state and then displays notes", async () => {
     fetch.mockResolvedValueOnce({
       ok: true,
-      json: async () => mockNotes,
+      json: async () => ({ data: mockNotes }),
     });
 
     render(<App />);
@@ -34,7 +34,7 @@ describe("App component", () => {
   test("adds a new note", async () => {
     fetch.mockResolvedValueOnce({
       ok: true,
-      json: async () => mockNotes,
+      json: async () => ({ data: mockNotes }),
     });
     render(<App />);
     await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
@@ -46,10 +46,12 @@ describe("App component", () => {
     // This is for the refetch after adding
     fetch.mockResolvedValueOnce({
       ok: true,
-      json: async () => [
-        ...mockNotes,
-        { id: 3, title: "New Note", content: "New Content" },
-      ],
+      json: async () => ({
+        data: [
+          ...mockNotes,
+          { id: 3, title: "New Note", content: "New Content" },
+        ],
+      }),
     });
 
     fireEvent.change(screen.getByPlaceholderText("Title"), {
@@ -69,7 +71,7 @@ describe("App component", () => {
   test("deletes a note", async () => {
     fetch.mockResolvedValueOnce({
       ok: true,
-      json: async () => mockNotes,
+      json: async () => ({ data: mockNotes }),
     });
     render(<App />);
     await waitFor(() =>
@@ -82,7 +84,7 @@ describe("App component", () => {
     // This is for the refetch after deleting
     fetch.mockResolvedValueOnce({
       ok: true,
-      json: async () => [mockNotes[1]],
+      json: async () => ({ data: [mockNotes[1]] }),
     });
 
     const deleteButtons = screen.getAllByText("Delete");
