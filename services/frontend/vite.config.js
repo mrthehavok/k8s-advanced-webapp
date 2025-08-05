@@ -5,9 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   define: {
-    'process.env.VITE_APP_VERSION': JSON.stringify(
-      process.env.npm_package_version
-    )
+    'process.env.VITE_APP_VERSION': JSON.stringify(process.env.VITE_APP_VERSION)
   },
   server: {
     proxy: {

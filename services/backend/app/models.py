@@ -41,4 +41,4 @@ class Pagination(BaseModel):
     total: int
     limit: int
     offset: int
-    data: List[NoteOut]
+    data: List[Note]
