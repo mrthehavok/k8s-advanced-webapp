@@ -24,8 +24,7 @@ ingress:
   className: alb
   annotations:
     # ALB configuration
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
+    # AIDEV-NOTE: ALB-related annotations will be managed via the AWS Load Balancer Controller terraform module directly.
   paths:
     - path: /
       pathType: Prefix

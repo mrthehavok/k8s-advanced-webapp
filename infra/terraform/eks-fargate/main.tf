@@ -17,11 +17,6 @@ data "aws_eks_cluster_auth" "cluster" {
 
 # Kubernetes provider configuration depends on EKS cluster outputs
 # This ensures the provider is configured only after the cluster exists
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-}
 
 data "aws_availability_zones" "available" {
   state = "available"
