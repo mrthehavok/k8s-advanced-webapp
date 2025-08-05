@@ -26,6 +26,7 @@ WORKDIR /app
 
 # Create a non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN mkdir -p /data && chown -R appuser:appgroup /data
 USER appuser
 
 # Copy virtual environment from builder

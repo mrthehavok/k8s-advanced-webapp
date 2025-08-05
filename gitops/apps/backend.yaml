@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: "https://github.com/mrthehavok/k8s-advanced-webapp.git" # AIDEV-TODO: This should be dynamically discovered
+    path: charts/backend
+    targetRevision: HEAD
+    helm:
+      releaseName: backend
+      values: |
+        replicaCount: 1
+        image:
+          repository: "k8s-advanced-webapp-backend"
+          tag: "latest"
+          pullPolicy: IfNotPresent
+        service:
+          type: ClusterIP
+          port: 8000
+        probes:
+          liveness:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readiness:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+        env:
+          - name: DATABASE_URL
+            value: "sqlite+aiosqlite:///:memory:"
+          - name: LOG_LEVEL
+            value: "info"
+        serviceAccount:
+          create: true
+          name: ""
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

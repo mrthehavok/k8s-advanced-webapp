@@ -8,7 +8,7 @@ variable "irsa_configs" {
   type = map(object({
     namespace            = string
     service_account_name = string
-    policy_arns          = list(string)
+    policy_json_path     = string
   }))
 }
 

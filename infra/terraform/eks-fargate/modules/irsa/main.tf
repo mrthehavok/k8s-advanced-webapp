@@ -59,7 +59,7 @@ resource "aws_iam_policy" "irsa" {
   for_each = local.irsa_configs
 
   name   = "${var.project_name}-${var.environment}-${each.key}-policy"
-  policy = file("${path.module}/policies/${each.key}.json")
+  policy = file(each.value.policy_json_path)
 }
 
 ############################################

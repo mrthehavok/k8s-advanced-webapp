@@ -5,7 +5,7 @@ aws_region = "eu-west-1"
 environment = "dev"
 
 # Project name
-project_name = "team-notes"
+project_name = "team-notes-dev"
 
 # VPC CIDR block
 vpc_cidr = "10.10.0.0/16"
@@ -27,11 +27,11 @@ aws_auth_users = [
 
 # Fargate profiles
 fargate_profiles = {
-  default = {
-    namespace_patterns = ["default", "kube-system"]
-    labels             = {}
-    subnet_ids         = []
-  }
+default = {
+  namespace_patterns = ["default", "kube-system", "flux-system"]
+  labels             = {}
+  subnet_ids         = []
+}
   dev = {
     namespace_patterns = ["dev"]
     labels             = {}
@@ -55,10 +55,21 @@ fargate_profiles = {
 }
 
 # IRSA configurations - empty to preserve existing resources
-irsa_configs = {}
+irsa_configs = {
+  alb-controller = {
+    namespace            = "kube-system"
+    service_account_name = "aws-load-balancer-controller"
+    policy_json_path     = "modules/irsa/policies/alb-controller.json"
+  }
+  cert-manager = {
+    namespace            = "cert-manager"
+    service_account_name = "cert-manager"
+    policy_json_path     = "modules/irsa/policies/cert-manager.json"
+  }
+}
 
 # Disable IRSA since resources already exist
-enable_irsa = false
+enable_irsa = true
 
 # Keep cluster version as default
 cluster_version = "1.31"

@@ -1,10 +1,14 @@
 # Image configuration
+
+global:
+  repositoryOwner: mrthehavok
+
 image:
   # The repository is set to ghcr.io/<OWNER>/k8s-advanced-webapp-frontend
   # The <OWNER> placeholder is replaced by the CI/CD pipeline with the actual GitHub repository owner.
   # The image tag is updated by the image-updater component in the cluster, which tracks the latest
   # container image digest from the repository.
-  repository: "ghcr.io/${GITHUB_REPOSITORY_OWNER}/k8s-advanced-webapp-backend"
+  repository: "k8s-advanced-webapp-frontend"
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -22,24 +26,13 @@ ingress:
     # ALB configuration
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /
-
-    # cert-manager integration
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    cert-manager.io/acme-challenge-type: dns01
-
-    # SSL configuration
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/ssl-redirect: "443"
-  hosts:
-    - host: team-notes.example.com
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: frontend-tls
-      hosts:
-        - team-notes.example.com
+  paths:
+    - path: /
+      pathType: Prefix
+    - path: /api/
+      pathType: Prefix
+      serviceName: backend
+      servicePort: http
 
 # HPA configuration
 autoscaling:
