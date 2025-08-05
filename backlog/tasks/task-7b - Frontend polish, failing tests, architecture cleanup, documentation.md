@@ -1,6 +1,6 @@
 id: task-7b
 title: "Frontend polish, fix tests, cleanup, docs"
-status: "To Do"
+status: "In Progress"
 depends_on: ["task-7a"]
 created: 2025-08-05
 updated: 2025-08-05
@@ -27,13 +27,32 @@ Address outstanding quality items after task-7a:
 
 <!-- Update as work progresses -->
 
+- 2025-08-05 12:07 UTC – Began implementation; architect spec completed; branch feat/task-7b-frontend-polish in use.
+- 2025-08-05 12:13 UTC – Frontend redesign complete. Implemented new components (NoteCard, EditNoteModal, SearchBar, ThemeToggle), theme context for light/dark mode, and updated App.jsx to use them. All unit tests are passing.
+
 ## Decisions Made
 
-<!-- Document key implementation decisions -->
+- Implemented a responsive grid layout for the notes list.
+- Used CSS variables for easy theming and maintenance.
+- Persisted the theme preference in localStorage.
+- Added a modal for editing notes to provide a better user experience.
 
 ## Files Modified
 
-<!-- Track all file changes -->
+- `services/frontend/src/components/NoteCard.jsx` (created)
+- `services/frontend/src/components/NoteCard.css` (created)
+- `services/frontend/src/components/EditNoteModal.jsx` (created)
+- `services/frontend/src/components/EditNoteModal.css` (created)
+- `services/frontend/src/components/SearchBar.jsx` (created)
+- `services/frontend/src/components/SearchBar.css` (created)
+- `services/frontend/src/components/ThemeToggle.jsx` (created)
+- `services/frontend/src/components/ThemeToggle.css` (created)
+- `services/frontend/src/contexts/ThemeContext.jsx` (created)
+- `services/frontend/src/variables.css` (created)
+- `services/frontend/src/App.jsx` (modified)
+- `services/frontend/src/App.css` (modified)
+- `services/frontend/src/main.jsx` (modified)
+- `services/frontend/src/__tests__/App.test.jsx` (modified)
 
 ## Blockers
 

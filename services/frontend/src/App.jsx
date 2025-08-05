@@ -1,11 +1,23 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import { useTheme } from "./contexts/ThemeContext";
+import NoteCard from "./components/NoteCard";
+import EditNoteModal from "./components/EditNoteModal";
+import SearchBar from "./components/SearchBar";
+import ThemeToggle from "./components/ThemeToggle";
+import "./components/NoteCard.css";
+import "./components/EditNoteModal.css";
+import "./components/SearchBar.css";
+import "./components/ThemeToggle.css";
 
 function App() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newNote, setNewNote] = useState({ title: "", content: "" });
+  const [editingNote, setEditingNote] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const { theme } = useTheme();
 
   useEffect(() => {
     fetchNotes();
@@ -19,7 +31,6 @@ function App() {
         throw new Error("Failed to fetch notes");
       }
       const data = await response.json();
-      // Backend returns paginated response with notes in data property
       setNotes(data.data || []);
       setError(null);
     } catch (error) {
@@ -49,6 +60,25 @@ function App() {
     }
   };
 
+  const handleUpdateNote = async (updatedNote) => {
+    try {
+      const response = await fetch(`/api/notes/${updatedNote.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedNote),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update note");
+      }
+      setEditingNote(null);
+      fetchNotes();
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   const handleDeleteNote = async (id) => {
     try {
       const response = await fetch(`/api/notes/${id}`, {
@@ -63,11 +93,18 @@ function App() {
     }
   };
 
+  const filteredNotes = notes.filter(
+    (note) =>
+      note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      note.content.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="App">
+    <div className={`App ${theme}`}>
+      <ThemeToggle />
       <h1>Notes</h1>
 
-      <form onSubmit={handleAddNote}>
+      <form onSubmit={handleAddNote} className="add-note-form">
         <input
           type="text"
           placeholder="Title"
@@ -82,18 +119,28 @@ function App() {
         <button type="submit">Add Note</button>
       </form>
 
+      <SearchBar onSearch={setSearchTerm} />
+
       {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
 
-      <div className="notes-list">
-        {notes.map((note) => (
-          <div key={note.id} className="note">
-            <h2>{note.title}</h2>
-            <p>{note.content}</p>
-            <button onClick={() => handleDeleteNote(note.id)}>Delete</button>
-          </div>
+      <div className="notes-grid">
+        {filteredNotes.map((note) => (
+          <NoteCard
+            key={note.id}
+            note={note}
+            onEdit={() => setEditingNote(note)}
+          />
         ))}
       </div>
+
+      {editingNote && (
+        <EditNoteModal
+          note={editingNote}
+          onSave={handleUpdateNote}
+          onClose={() => setEditingNote(null)}
+        />
+      )}
     </div>
   );
 }
