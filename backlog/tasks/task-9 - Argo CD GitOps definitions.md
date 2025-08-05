@@ -19,6 +19,10 @@ Implement GitOps deployment workflow using Argo CD:
   - `monitoring` (kube-prometheus-stack)
   - `backend` (notes API)
   - `frontend` (SPA)
+- Add Argo CD Image Updater annotations for backend & frontend Applications so that any new image tag pushed to GHCR is detected and rolled out automatically:
+  - `argocd-image-updater.argoproj.io/image-list: ghcr.io/your-org/backend,ghcr.io/your-org/frontend`
+  - `argocd-image-updater.argoproj.io/<escaped_repo>.update-strategy: latest`
+  - `argocd-image-updater.argoproj.io/refresh: always`
 - Use sync-waves and dependency hooks to control order
 - Separate `dev`, `monitoring`, `cert-manager`, and `argocd` namespaces as destinations
 - Enable automated sync with pruning and self-heal
@@ -42,3 +46,4 @@ Implement GitOps deployment workflow using Argo CD:
 
 - Scaffold root application
 - Add child app manifests
+- Patch gitops/apps/frontend.yaml and gitops/apps/backend.yaml with the image-updater annotations.

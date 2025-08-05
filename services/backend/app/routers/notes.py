@@ -27,9 +27,9 @@ async def read_notes(
     total = await crud.get_notes_count(db_session)
     
     # Convert SQLAlchemy models to Pydantic models for the response
-    notes_out = [models.NoteOut.model_validate(note) for note in notes]
+    notes_out = [models.Note.model_validate(note) for note in notes]
 
-    return models.Pagination(total=total, limit=limit, offset=skip, data=notes_out)
+    return models.Pagination(total=total, limit=limit, offset=skip, data=notes)
 
 
 @router.get("/{note_id}", response_model=models.Note)

@@ -4,7 +4,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npm run build
+ARG VITE_APP_VERSION
+RUN VITE_APP_VERSION=$VITE_APP_VERSION npm run build
 
 # Stage 2: Serve the static files with Nginx
 FROM nginx:1.25-alpine

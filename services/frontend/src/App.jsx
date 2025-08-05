@@ -11,7 +11,8 @@ import "./components/SearchBar.css";
 import "./components/ThemeToggle.css";
 
 function App() {
-  const [notes, setNotes] = useState([]);
+  const [allNotes, setAllNotes] = useState([]);
+  const [filteredNotes, setFilteredNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newNote, setNewNote] = useState({ title: "", content: "" });
@@ -23,6 +24,16 @@ function App() {
     fetchNotes();
   }, []);
 
+  useEffect(() => {
+    const filtered = allNotes.filter(
+      (note) =>
+        note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (note.content &&
+          note.content.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+    setFilteredNotes(filtered);
+  }, [searchTerm, allNotes]);
+
   const fetchNotes = async () => {
     try {
       setLoading(true);
@@ -31,7 +42,7 @@ function App() {
         throw new Error("Failed to fetch notes");
       }
       const data = await response.json();
-      setNotes(data.data || []);
+      setAllNotes(data.data || []);
       setError(null);
     } catch (error) {
       setError(error.message);
@@ -93,16 +104,12 @@ function App() {
     }
   };
 
-  const filteredNotes = notes.filter(
-    (note) =>
-      note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      note.content.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
     <div className={`App ${theme}`}>
-      <ThemeToggle />
-      <h1>Notes</h1>
+      <header className="app-header">
+        <h1>Notes - {process.env.VITE_APP_VERSION || "dev"}</h1>
+        <ThemeToggle />
+      </header>
 
       <form onSubmit={handleAddNote} className="add-note-form">
         <input
@@ -130,6 +137,7 @@ function App() {
             key={note.id}
             note={note}
             onEdit={() => setEditingNote(note)}
+            onDelete={handleDeleteNote}
           />
         ))}
       </div>
