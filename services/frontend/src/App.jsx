@@ -19,7 +19,8 @@ function App() {
         throw new Error("Failed to fetch notes");
       }
       const data = await response.json();
-      setNotes(data);
+      // Backend returns paginated response with notes in data property
+      setNotes(data.data || []);
       setError(null);
     } catch (error) {
       setError(error.message);

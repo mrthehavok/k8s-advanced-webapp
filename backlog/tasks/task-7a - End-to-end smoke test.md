@@ -28,13 +28,21 @@ After Helm charts for the backend (task-6) and frontend (task-7) are packaged, d
 - 2025-08-04 16:51: Decided to switch to GHCR and implement automated build workflows for backend & frontend images
 - 2025-08-05 07:50: Fixed backend CrashLoop by rebuilding image; added ServiceAccount to frontend, pods running, URL retrieved
 - 2025-08-05 10:28: Ingress successfully provisioned with working URL: http://k8s-dev-frontend-bb957671cb-158967001.eu-west-1.elb.amazonaws.com
+- 2025-08-05 10:30: Frontend loads but shows a blank page, indicating a JavaScript error.
+- 2025-08-05 10:33: Investigated frontend code, found it expects a simple array from `/api/notes` but the backend returns a paginated object.
+- 2025-08-05 10:34: Patched `services/frontend/src/App.jsx` to correctly parse the paginated response (`data.data`).
+- 2025-08-05 10:57: Added a proper `nginx.conf` for the frontend to handle SPA routing correctly.
+- 2025-08-05 11:09: Rebuilt and redeployed the frontend image.
+- 2025-08-05 11:10: Switched to using the `latest` tag for all images as requested.
+- 2025-08-05 11:17: Confirmed the UI is now rendering correctly and is functional.
 
 ## Decisions Made
 
-- Use GitHub Container Registry (ghcr.io) for all service images
-- Standardise image tags as `main-<SHA>` plus `latest`
-- Use in-memory SQLite for dev environment
-- Adopt explicit ServiceAccount pattern for frontend chart
+- Use GitHub Container Registry (ghcr.io) for all service images.
+- All container images will be tagged with `latest` for deployment in the `dev` environment to simplify rollouts.
+- Use in-memory SQLite for dev environment.
+- Adopt explicit ServiceAccount pattern for frontend chart.
+- Added a custom `nginx.conf` to the frontend service to ensure proper routing for a single-page application.
 
 ### Smoke Test Deployment Plan
 
@@ -103,10 +111,14 @@ The deployment will be considered successful if:
 - charts/backend/values.yaml (updated probe paths to include /api prefix)
 - charts/frontend/values.yaml (updated to remove hostname restriction)
 - charts/frontend/templates/ingress.yaml (updated to remove host-based routing)
+- `services/frontend/src/App.jsx` (updated to handle paginated API response)
+- `services/frontend/Dockerfile` (updated to include custom nginx config)
+- `services/frontend/nginx.conf` (added)
 
 ## Blockers
 
-<!-- Document any blockers encountered -->
+- Initial frontend deployment resulted in a blank page due to a mismatch in the expected API response format.
+- The default Nginx configuration was not suitable for a React single-page application, causing routing issues on refresh.
 
 ## Next Steps
 

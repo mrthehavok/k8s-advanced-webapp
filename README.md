@@ -12,18 +12,17 @@ terraform init
 terraform apply -var-file=envs/dev.tfvars
 ```
 
-3. Build **and push** multi-architecture Docker images for the backend and frontend (or let GitHub Actions do this for you):
+3. Build and push Docker images for the backend and frontend. For the `dev` environment, we use the `latest` tag.
 
 ```bash
-# Local multi-arch build (optional)
-docker buildx build --platform linux/amd64,linux/arm64 \
-  -t ghcr.io/<org>/backend:latest services/backend --push
+# Build and push the backend image
+docker build -t ghcr.io/mrthehavok/k8s-advanced-webapp-backend:latest ./services/backend --push
 
-docker buildx build --platform linux/amd64,linux/arm64 \
-  -t ghcr.io/<org>/frontend:latest services/frontend --push
+# Build and push the frontend image
+docker build -t ghcr.io/mrthehavok/k8s-advanced-webapp-frontend:latest ./services/frontend --push
 ```
 
-4. Create a GitHub Container Registry secret in the `dev` namespace so the cluster can pull images:
+4. Create a GitHub Container Registry secret in the `dev` namespace so the cluster can pull images (if your repository is private):
 
 ```bash
 kubectl -n dev create secret docker-registry ghcr-credentials \
@@ -57,6 +56,8 @@ curl http://k8s-dev-frontend-bb957671cb-158967001.eu-west-1.elb.amazonaws.com/ap
 # Open the UI in your browser
 open http://k8s-dev-frontend-bb957671cb-158967001.eu-west-1.elb.amazonaws.com
 ```
+
+The application is now fully deployed. The frontend will be available at the address provided by the ingress, and it is configured to communicate with the backend API.
 
 ---
 
