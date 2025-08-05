@@ -14,13 +14,13 @@ image:
 
 # Service configuration
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 80
   targetPort: 80
 
 # Ingress configuration
 ingress:
-  enabled: true
+  enabled: false
   className: alb
   annotations:
     # ALB configuration
@@ -52,9 +52,7 @@ resources:
 # Config for runtime environment
 config:
   enabled: false
-  data:
-    {}
-    # API_ENDPOINT: https://api.example.com
+  data: {}
 
 # Probes
 livenessProbe:

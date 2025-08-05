@@ -2,22 +2,6 @@ locals {
   cluster_name = "${var.project_name}-${var.environment}"
 }
 
-# Data source to get the existing EKS cluster (if it exists)
-data "aws_eks_cluster" "cluster" {
-  name = local.cluster_name
-
-  depends_on = [module.eks_cluster]
-}
-
-data "aws_eks_cluster_auth" "cluster" {
-  name = local.cluster_name
-
-  depends_on = [module.eks_cluster]
-}
-
-# Kubernetes provider configuration depends on EKS cluster outputs
-# This ensures the provider is configured only after the cluster exists
-
 data "aws_availability_zones" "available" {
   state = "available"
 }

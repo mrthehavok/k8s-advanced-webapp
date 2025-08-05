@@ -43,7 +43,7 @@ charts/frontend/
 ### 3. Ingress Configuration
 
 - **Type**: AWS ALB via annotations
-- **Host**: Configurable (default: team-notes.example.com)
+- **Host**: Configurable via values
 
 ### 4. ConfigMap Strategy
 
@@ -71,11 +71,7 @@ ingress:
   enabled: true
   className: alb
   annotations: {}
-  hosts:
-    - host: team-notes.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  hosts: []
 
 # HPA configuration
 autoscaling:
@@ -96,9 +92,7 @@ resources:
 # Config for runtime environment
 config:
   enabled: false
-  data:
-    {}
-    # API_ENDPOINT: https://api.example.com
+  data: {}
 
 # Probes
 livenessProbe:

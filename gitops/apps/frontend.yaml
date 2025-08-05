@@ -23,19 +23,15 @@ spec:
           tag: latest
           pullPolicy: IfNotPresent
         service:
-          type: ClusterIP
+          type: LoadBalancer
           port: 80
           targetPort: 80
         ingress:
-          enabled: true
+          enabled: false
           className: alb
           annotations:
             # AIDEV-NOTE: ALB-related annotations will be managed via the AWS Load Balancer Controller terraform module directly.
-          hosts:
-            - host: team-notes.example.com
-              paths:
-                - path: /
-                  pathType: Prefix
+          hosts: []
         autoscaling:
           enabled: true
           minReplicas: 2

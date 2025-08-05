@@ -20,8 +20,8 @@ This chart deploys the React frontend SPA.
 | `ingress.annotations`                        | object | `{}`                                                                                 | Ingress annotations                                      |
 | `ingress.className`                          | string | `"alb"`                                                                              | Ingress class name                                       |
 | `ingress.enabled`                            | bool   | `true`                                                                               | Enable Ingress                                           |
-| `ingress.hosts`                              | list   | `[{"host":"team-notes.example.com","paths":[{"path":"/","pathType":"Prefix"}]}]`     | Ingress host configuration                               |
-| `ingress.tls`                                | list   | `[{"hosts":["team-notes.example.com"],"secretName":"frontend-tls"}]`                 | Ingress TLS configuration                                |
+| `ingress.hosts`                              | list   | `[]`                                                                                 | Ingress host configuration                               |
+| `ingress.tls`                                | list   | `[]`                                                                                 | Ingress TLS configuration                                |
 | `livenessProbe`                              | object | `{"httpGet":{"path":"/","port":"http"},"initialDelaySeconds":10,"periodSeconds":30}` | Liveness probe configuration                             |
 | `nodeSelector`                               | object | `{}`                                                                                 | Node labels for pod assignment                           |
 | `readinessProbe`                             | object | `{"httpGet":{"path":"/","port":"http"},"initialDelaySeconds":5,"periodSeconds":10}`  | Readiness probe configuration                            |

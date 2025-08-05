@@ -1,10 +1,10 @@
 # Development values for frontend.
+service:
+  type: LoadBalancer
+
 ingress:
-  hosts:
-    - host: dev.team-notes.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  enabled: false
+  hosts: []
   tls: []
 
 autoscaling:

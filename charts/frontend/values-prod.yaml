@@ -1,12 +1,12 @@
 # Production values for frontend.
 replicaCount: 3
 
+service:
+  type: ClusterIP
+
 ingress:
-  hosts:
-    - host: team-notes.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  enabled: false
+  hosts: []
   tls: []
 
 autoscaling:
