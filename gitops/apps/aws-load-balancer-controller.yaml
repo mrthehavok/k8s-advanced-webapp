@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-load-balancer-controller
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/mrthehavok/k8s-advanced-webapp.git'
+    chart: aws-load-balancer-controller
+    targetRevision: 1.7.1
+    helm:
+      releaseName: aws-load-balancer-controller
+      values: |
+        clusterName: "k8s-webapp-dev"
+        region: "eu-west-1"
+        vpcId: "vpc-06cff51cb3d321f8b" # AIDEV-NOTE: Replace with actual dev VPC ID
+        serviceAccount:
+          create: true
+          name: aws-load-balancer-controller
+          annotations:
+            eks.amazonaws.com/role-arn: "arn:aws:iam::123456789012:role/k8s-webapp-dev-alb-controller" # AIDEV-NOTE: Replace with actual dev IRSA role ARN
+        enableShield: false
+        enableWaf: false
+        enableWafv2: false
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

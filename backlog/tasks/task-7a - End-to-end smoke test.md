@@ -1,8 +1,8 @@
 id: task-7a
 title: "End-to-end smoke test"
-status: "In Progress"
+status: "Done"
 created: 2025-08-03
-updated: 2025-08-04
+updated: 2025-08-05
 
 ## Description
 
@@ -26,11 +26,14 @@ After Helm charts for the backend (task-6) and frontend (task-7) are packaged, d
 - 2025-08-04 16:40: Clean Terraform plan achieved; helm releases deployed
 - 2025-08-04 16:48: Backend pod `ImagePullBackOff` due to missing image; manual docker build failed to push (Docker Hub auth)
 - 2025-08-04 16:51: Decided to switch to GHCR and implement automated build workflows for backend & frontend images
+- 2025-08-05 07:50: Fixed backend CrashLoop by rebuilding image; added ServiceAccount to frontend, pods running, URL retrieved
 
 ## Decisions Made
 
 - Use GitHub Container Registry (ghcr.io) for all service images
 - Standardise image tags as `main-<SHA>` plus `latest`
+- Use in-memory SQLite for dev environment
+- Adopt explicit ServiceAccount pattern for frontend chart
 
 ### Smoke Test Deployment Plan
 
@@ -89,10 +92,12 @@ The deployment will be considered successful if:
 
 ## Files Modified
 
-<!-- Track all file changes -->
-
 - .github/workflows/backend-ci.yml (added)
 - .github/workflows/frontend-ci.yml (updated)
+- charts/backend/templates/deployment.yaml (updated)
+- charts/backend/values.yaml (updated)
+- charts/frontend/templates/serviceaccount.yaml (added)
+- README.md (added)
 
 ## Blockers
 
@@ -100,4 +105,5 @@ The deployment will be considered successful if:
 
 ## Next Steps
 
-<!-- Maintain continuity between sessions -->
+- Integrate persistent database (e.g., RDS Postgres) instead of in-memory SQLite
+- Add GitHub Actions end-to-end smoke-test job

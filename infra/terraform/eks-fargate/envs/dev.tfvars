@@ -5,7 +5,7 @@ aws_region = "eu-west-1"
 environment = "dev"
 
 # Project name
-project_name = "team-notes"
+project_name = "team-notes-dev"
 
 # VPC CIDR block
 vpc_cidr = "10.10.0.0/16"
@@ -27,11 +27,11 @@ aws_auth_users = [
 
 # Fargate profiles
 fargate_profiles = {
-  default = {
-    namespace_patterns = ["default", "kube-system"]
-    labels             = {}
-    subnet_ids         = []
-  }
+default = {
+  namespace_patterns = ["default", "kube-system", "flux-system"]
+  labels             = {}
+  subnet_ids         = []
+}
   dev = {
     namespace_patterns = ["dev"]
     labels             = {}
