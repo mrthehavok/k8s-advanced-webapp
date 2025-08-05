@@ -36,14 +36,16 @@ describe("App component", () => {
     localStorage.clear();
   });
 
-  test("renders loading state and then displays notes", async () => {
+  test("renders header, loading state, and then displays notes", async () => {
     fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ data: mockNotes }),
     });
 
+    process.env.VITE_APP_VERSION = 'v2-test';
     renderWithTheme(<App />);
 
+    expect(screen.getByText("Notes - v2-test")).toBeInTheDocument();
     expect(screen.getByText("Loading...")).toBeInTheDocument();
 
     await waitFor(() => {
@@ -88,7 +90,7 @@ describe("App component", () => {
     });
   });
 
-  test("updates a note", async () => {
+  test("updates a note's title and content", async () => {
     fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ data: mockNotes }),
@@ -99,6 +101,18 @@ describe("App component", () => {
     );
 
     const editButtons = screen.getAllByText("Edit");
+
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({}) });
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        data: [
+          { id: 1, title: "Updated Note", content: "Updated Content" },
+          mockNotes[1],
+        ],
+      }),
+    });
+
     fireEvent.click(editButtons[0]);
 
     await waitFor(() => {
@@ -108,26 +122,19 @@ describe("App component", () => {
     fireEvent.change(screen.getByDisplayValue("Test Note 1"), {
       target: { value: "Updated Note" },
     });
-
-    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({}) });
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        data: [
-          { id: 1, title: "Updated Note", content: "Content 1" },
-          mockNotes[1],
-        ],
-      }),
+    fireEvent.change(screen.getByDisplayValue("Content 1"), {
+      target: { value: "Updated Content" },
     });
 
     fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => {
       expect(screen.getByText("Updated Note")).toBeInTheDocument();
+      expect(screen.getByText("Updated Content")).toBeInTheDocument();
     });
   });
 
-  test("filters notes based on search term", async () => {
+  test("deletes a note", async () => {
     fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ data: mockNotes }),
@@ -137,12 +144,50 @@ describe("App component", () => {
       expect(screen.getByText("Test Note 1")).toBeInTheDocument()
     );
 
-    fireEvent.change(screen.getByPlaceholderText("Search notes..."), {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({}) });
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        data: [mockNotes[1]],
+      }),
+    });
+
+    const deleteButtons = screen.getAllByText("Delete");
+    fireEvent.click(deleteButtons[0]);
+
+    await waitFor(() => {
+      expect(screen.queryByText("Test Note 1")).not.toBeInTheDocument();
+      expect(screen.getByText("Test Note 2")).toBeInTheDocument();
+    });
+  });
+
+  test("filters notes and restores list when search is cleared", async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ data: mockNotes }),
+    });
+    renderWithTheme(<App />);
+    await waitFor(() =>
+      expect(screen.getByText("Test Note 1")).toBeInTheDocument()
+    );
+
+    const searchInput = screen.getByPlaceholderText("Search notes...");
+    fireEvent.change(searchInput, {
       target: { value: "Note 2" },
     });
 
     await waitFor(() => {
       expect(screen.queryByText("Test Note 1")).not.toBeInTheDocument();
+      expect(screen.getByText("Test Note 2")).toBeInTheDocument();
+    });
+
+    // Clear the search
+    fireEvent.change(searchInput, {
+      target: { value: "" },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("Test Note 1")).toBeInTheDocument();
       expect(screen.getByText("Test Note 2")).toBeInTheDocument();
     });
   });
