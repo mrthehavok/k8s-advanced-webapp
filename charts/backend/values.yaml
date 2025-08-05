@@ -38,13 +38,13 @@ service:
 probes:
   liveness:
     httpGet:
-      path: /healthz
+      path: /api/healthz
       port: http
     initialDelaySeconds: 15
     periodSeconds: 20
   readiness:
     httpGet:
-      path: /readyz
+      path: /api/readyz
       port: http
     initialDelaySeconds: 5
     periodSeconds: 10

@@ -27,6 +27,7 @@ After Helm charts for the backend (task-6) and frontend (task-7) are packaged, d
 - 2025-08-04 16:48: Backend pod `ImagePullBackOff` due to missing image; manual docker build failed to push (Docker Hub auth)
 - 2025-08-04 16:51: Decided to switch to GHCR and implement automated build workflows for backend & frontend images
 - 2025-08-05 07:50: Fixed backend CrashLoop by rebuilding image; added ServiceAccount to frontend, pods running, URL retrieved
+- 2025-08-05 10:28: Ingress successfully provisioned with working URL: http://k8s-dev-frontend-bb957671cb-158967001.eu-west-1.elb.amazonaws.com
 
 ## Decisions Made
 
@@ -98,6 +99,10 @@ The deployment will be considered successful if:
 - charts/backend/values.yaml (updated)
 - charts/frontend/templates/serviceaccount.yaml (added)
 - README.md (added)
+- services/backend/app/main.py (updated to add /api prefix to all routes)
+- charts/backend/values.yaml (updated probe paths to include /api prefix)
+- charts/frontend/values.yaml (updated to remove hostname restriction)
+- charts/frontend/templates/ingress.yaml (updated to remove host-based routing)
 
 ## Blockers
 

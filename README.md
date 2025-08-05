@@ -44,18 +44,18 @@ helm upgrade --install frontend ./charts/frontend -n dev
 
 ```bash
 kubectl get ingress -n dev
-# ADDRESS column should show: https://team-notes.example.com
+# ADDRESS column should show the ALB address, e.g.: k8s-dev-frontend-bb957671cb-158967001.eu-west-1.elb.amazonaws.com
 ```
 
 7. Smoke-test the deployment:
 
 ```bash
 # Backend health endpoint
-curl -k https://team-notes.example.com/api/healthz
+curl http://k8s-dev-frontend-bb957671cb-158967001.eu-west-1.elb.amazonaws.com/api/healthz
 # → {"status":"ok"}
 
-# Open the UI in your browser, log in, and add a note
-open https://team-notes.example.com
+# Open the UI in your browser
+open http://k8s-dev-frontend-bb957671cb-158967001.eu-west-1.elb.amazonaws.com
 ```
 
 ---

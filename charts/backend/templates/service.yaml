@@ -3,6 +3,10 @@ kind: Service
 metadata:
   name: {{ include "backend.fullname" . }}
   labels: {{- include "backend.labels" . | nindent 4 }}
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /api/healthz
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /api/healthz
 spec:
   type: {{ .Values.service.type }}
   ports:

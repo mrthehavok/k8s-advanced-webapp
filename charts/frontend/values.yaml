@@ -26,12 +26,13 @@ ingress:
     # ALB configuration
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /
-  hosts:
-    - host: team-notes.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  paths:
+    - path: /
+      pathType: Prefix
+    - path: /api/
+      pathType: Prefix
+      serviceName: backend
+      servicePort: http
 
 # HPA configuration
 autoscaling:

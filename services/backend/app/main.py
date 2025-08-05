@@ -1,5 +1,5 @@
 # [task-3]
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
@@ -34,17 +34,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
-app.include_router(notes.router)
+# Define a router that will contain all API endpoints
+api_router = APIRouter()
+
+# Include the notes router under the api_router
+api_router.include_router(notes.router)
 
 # Health check endpoints
-@app.get("/healthz", tags=["Health"])
+@api_router.get("/healthz", tags=["Health"])
 async def healthz():
     """Liveness probe."""
     return {"status": "ok"}
 
-@app.get("/readyz", tags=["Health"])
+@api_router.get("/readyz", tags=["Health"])
 async def readyz():
     """Readiness probe."""
     # In a real application, this might check database connectivity, etc.
     return {"status": "ready"}
+
+# Mount the main API router with the /api prefix
+app.include_router(api_router, prefix="/api")
