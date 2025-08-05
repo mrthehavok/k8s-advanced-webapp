@@ -1,0 +1,37 @@
+# AIDEV-NOTE: This is a stub values file for the kube-prometheus-stack Helm chart.
+# It's intentionally minimal to start. We will add more configuration as needed.
+
+# Global settings
+global:
+  # The namespace where the monitoring stack will be deployed.
+  namespace: monitoring
+
+# Grafana configuration
+grafana:
+  # We are disabling the default ingress for now. We will manage it separately.
+  ingress:
+    enabled: false
+
+# Resource limits for the various components.
+# AIDEV-TODO: Tune these resource limits based on cluster size and load. (T-11)
+kube-state-metrics:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+prometheus-node-exporter:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false

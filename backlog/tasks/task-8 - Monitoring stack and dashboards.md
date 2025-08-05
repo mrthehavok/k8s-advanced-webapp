@@ -1,8 +1,8 @@
 id: task-8
 title: "Monitoring: kube-prometheus-stack & custom dashboards"
-status: "To Do"
+status: "In Progress"
 created: 2025-08-01
-updated: 2025-08-01
+updated: 2025-08-05
 
 ## Description
 
@@ -29,13 +29,26 @@ Install and configure observability stack:
 
 ## Session History
 
+- 2025-08-05T15:49:52Z: Branch feat/task-8-monitoring-stack created.
+- 2025-08-05T15:49:52Z: Initial scaffold (monitoring.yaml, values.yaml, placeholders) committed.
+
 ## Decisions Made
 
+- Use kube-prometheus-stack via Argo CD; sandbox values stub committed.
+
 ## Files Modified
+
+- gitops/apps/monitoring.yaml (created)
+- monitoring/kube-prometheus-stack/values.yaml (created)
+- monitoring/service-monitors/\*.yaml (placeholders)
+- monitoring/alerts/app-alerts.yaml
+- monitoring/dashboards/README.md
 
 ## Blockers
 
 ## Next Steps
 
-- Install stack via Argo CD
-- Import dashboards
+- Fill values.yaml with real config
+- Implement ServiceMonitors/dashboards/alerts
+- Add Grafana ingress
+- Deploy & verify in Argo CD
