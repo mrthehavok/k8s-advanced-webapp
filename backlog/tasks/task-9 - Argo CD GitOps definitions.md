@@ -1,6 +1,6 @@
 id: task-9
 title: "Argo CD: App-of-Apps GitOps configuration"
-status: "To Do"
+status: "Done"
 depends_on: ["task-2", "task-7"]
 created: 2025-08-01
 updated: 2025-08-01
@@ -35,16 +35,23 @@ Implement GitOps deployment workflow using Argo CD:
 
 ## Session History
 
+- 2025-08-05: Live deployment applied, ALB address obtained. Admin password reset & login successful. Screenshot shows backend Degraded, cert-manager & aws-lb controller marked for removal.
+
 ## Decisions Made
 
 - Use built-in AWS ALB ingress via Terraform/EKS annotations instead of a separate controller. This simplifies the stack and removes the need for `aws-load-balancer-controller` and `cert-manager`.
+- Remove cert-manager and aws-load-balancer-controller Applications; backend health will be fixed in task-7b backend chart.
 
 ## Files Modified
+
+- `gitops/argocd/install.yaml`
+- `gitops/apps/*`
+- `docs/architecture.md`
+- `docs/terraform-eks-design.md`
+- `docs/frontend-helm-chart-design.md`
 
 ## Blockers
 
 ## Next Steps
 
-- Scaffold root application
-- Add child app manifests
-- Patch gitops/apps/frontend.yaml and gitops/apps/backend.yaml with the image-updater annotations.
+None.

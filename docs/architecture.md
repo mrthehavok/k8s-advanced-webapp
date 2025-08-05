@@ -108,7 +108,6 @@ graph TB
 
 - Ingress is handled directly by the AWS Application Load Balancer, provisioned via Terraform.
 - The Kubernetes `Ingress` resource is configured with annotations that the EKS control plane uses to configure the ALB.
-- TLS is terminated at the ALB using certificates managed in AWS Certificate Manager (ACM). This removes the need for an in-cluster controller like `cert-manager`.
 
 ### Observability Stack
 
