@@ -12,18 +12,22 @@ metadata:
 spec:
   ingressClassName: {{ .Values.ingress.className }}
   rules:
-  {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
-      http:
+    - http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
+          # Frontend routes
+          - path: /
+            pathType: Prefix
             backend:
               service:
-                name: {{ include "frontend.fullname" $ }}
+                name: {{ include "frontend.fullname" . }}
                 port:
                   name: http
-          {{- end }}
-  {{- end }}
+          # Backend API routes
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  name: http
 {{- end }}

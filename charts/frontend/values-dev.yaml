@@ -1,6 +1,6 @@
 # Development values for frontend.
 service:
-  type: LoadBalancer
+  type: ClusterIP
 
 ingress:
   enabled: false

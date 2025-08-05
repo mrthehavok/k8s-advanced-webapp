@@ -4,10 +4,10 @@ metadata:
   name: {{ include "frontend.fullname" . }}
   labels:
     {{- include "frontend.labels" . | nindent 4 }}
-{{- if eq .Values.service.type "LoadBalancer" }}
+  {{- if eq .Values.service.type "LoadBalancer" }}
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: "/"
-{{- end }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:

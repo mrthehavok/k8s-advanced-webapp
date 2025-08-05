@@ -23,15 +23,15 @@ spec:
           tag: latest
           pullPolicy: IfNotPresent
         service:
-          type: LoadBalancer
+          type: ClusterIP
           port: 80
           targetPort: 80
         ingress:
-          enabled: false
-          className: alb
+          enabled: true
+          className: nginx
           annotations:
-            # AIDEV-NOTE: ALB-related annotations will be managed via the AWS Load Balancer Controller terraform module directly.
-          hosts: []
+            nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+            nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
         autoscaling:
           enabled: true
           minReplicas: 2
