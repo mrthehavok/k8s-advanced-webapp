@@ -43,7 +43,6 @@ charts/frontend/
 ### 3. Ingress Configuration
 
 - **Type**: AWS ALB via annotations
-- **TLS**: cert-manager ClusterIssuer
 - **Host**: Configurable (default: team-notes.example.com)
 
 ### 4. ConfigMap Strategy
@@ -74,7 +73,6 @@ ingress:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
     - host: team-notes.example.com
       paths:
@@ -176,7 +174,6 @@ volumes:
 
 ## Security Considerations
 
-1. **TLS Termination**: At ALB level via cert-manager
 2. **Network Policies**: Consider adding NetworkPolicy templates
 3. **Pod Security Standards**: Run as non-root nginx user
 4. **Image Scanning**: Integrate with CI/CD pipeline

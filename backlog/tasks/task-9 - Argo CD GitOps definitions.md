@@ -11,11 +11,10 @@ Implement GitOps deployment workflow using Argo CD:
 
 - Bootstrap Argo CD via Helm in `argocd` namespace:
   - Install using official Argo CD Helm chart
-  - Configure with ingress and TLS
+  - Configure with ingress
   - Set up admin credentials in AWS Secrets Manager
 - Create an App-of-Apps root Application pointing to `gitops/apps/`
 - Define child `Application` manifests:
-  - `infra` (load balancer controller, cert-manager)
   - `monitoring` (kube-prometheus-stack)
   - `backend` (notes API)
   - `frontend` (SPA)
@@ -24,7 +23,7 @@ Implement GitOps deployment workflow using Argo CD:
   - `argocd-image-updater.argoproj.io/<escaped_repo>.update-strategy: latest`
   - `argocd-image-updater.argoproj.io/refresh: always`
 - Use sync-waves and dependency hooks to control order
-- Separate `dev`, `monitoring`, `cert-manager`, and `argocd` namespaces as destinations
+- Separate `dev`, `monitoring` and `argocd` namespaces as destinations
 - Enable automated sync with pruning and self-heal
 
 ## Acceptance Criteria
@@ -37,6 +36,8 @@ Implement GitOps deployment workflow using Argo CD:
 ## Session History
 
 ## Decisions Made
+
+- Use built-in AWS ALB ingress via Terraform/EKS annotations instead of a separate controller. This simplifies the stack and removes the need for `aws-load-balancer-controller` and `cert-manager`.
 
 ## Files Modified
 
