@@ -51,8 +51,8 @@ probes:
 
 # Environment variables to be passed to the container
 env:
-  # - name: DB_PATH
-  #   value: "/data/notes.db"
+  - name: DATABASE_URL
+    value: "sqlite+aiosqlite:///:memory:"
   - name: LOG_LEVEL
     value: "info"
 

@@ -4,7 +4,10 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import String, Text, func, DateTime
 from datetime import datetime
 
-DATABASE_URL = "sqlite+aiosqlite:///./notes.db"
+import os
+
+DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite+aiosqlite:///./notes.db")
+print(f"DATABASE_URL: {DATABASE_URL}")
 
 engine = create_async_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = async_sessionmaker(autocommit=False, autoflush=False, bind=engine)
