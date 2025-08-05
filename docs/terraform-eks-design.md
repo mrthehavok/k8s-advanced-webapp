@@ -231,10 +231,6 @@ output "cluster_certificate_authority_data" {
   sensitive   = true
 }
 
-output "cluster_oidc_issuer_url" {
-  description = "The URL on the EKS cluster OIDC Issuer"
-  value       = module.eks_cluster.cluster_oidc_issuer_url
-}
 
 # Networking Outputs
 output "vpc_id" {

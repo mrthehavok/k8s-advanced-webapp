@@ -12,7 +12,7 @@ After Helm charts for the backend (task-6) and frontend (task-7) are packaged, d
 
 - [ ] Backend and frontend charts installed via `helm upgrade --install` (dev namespace)
 - [ ] Pods reach **Ready** state; services obtain ClusterIP
-- [ ] Ingress resolves with valid TLS cert (CLUSTER_ISSUER from previous tasks)
+- [ ] Ingress resolves as expected
 - [ ] `curl https://<domain>/api/health` returns `{"status":"ok"}`
 - [ ] Frontend URL shows notes list and CRUD operations work end-to-end
 - [ ] CI job outputs deployment logs and marks pipeline green on success

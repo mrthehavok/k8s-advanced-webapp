@@ -30,22 +30,12 @@ spec:
           enabled: true
           className: alb
           annotations:
-            alb.ingress.kubernetes.io/scheme: internet-facing
-            alb.ingress.kubernetes.io/target-type: ip
-            alb.ingress.kubernetes.io/healthcheck-path: /
-            cert-manager.io/cluster-issuer: letsencrypt-prod
-            cert-manager.io/acme-challenge-type: dns01
-            alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-            alb.ingress.kubernetes.io/ssl-redirect: "443"
+            # AIDEV-NOTE: ALB-related annotations will be managed via the AWS Load Balancer Controller terraform module directly.
           hosts:
             - host: team-notes.example.com
               paths:
                 - path: /
                   pathType: Prefix
-          tls:
-            - secretName: frontend-tls
-              hosts:
-                - team-notes.example.com
         autoscaling:
           enabled: true
           minReplicas: 2

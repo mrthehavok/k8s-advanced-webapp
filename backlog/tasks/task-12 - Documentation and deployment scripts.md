@@ -15,7 +15,7 @@ Produce comprehensive documentation and helper scripts covering:
   - `deploy.sh` – one-shot bootstrap for fresh AWS account
   - `destroy.sh` – tear-down with safety prompts
   - `port-forward-grafana.sh` – local port forward for monitoring
-- Troubleshooting section (common EKS, cert-manager, Argo CD issues)
+- Troubleshooting section (common EKS, Argo CD issues)
 
 ## Acceptance Criteria
 

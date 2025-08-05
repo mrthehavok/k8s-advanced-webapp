@@ -61,14 +61,6 @@ output "alb_controller_service_account" {
   }
 }
 
-output "cert_manager_service_account" {
-  description = "IRSA service account details for cert-manager"
-  value = {
-    namespace = "cert-manager"
-    name      = "cert-manager"
-    role_arn  = lookup(module.irsa.role_arns, "cert-manager", null)
-  }
-}
 # Fargate Profile Outputs
 output "fargate_profile_names" {
   description = "List of Fargate profile names created for the cluster"

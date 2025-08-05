@@ -42,11 +42,6 @@ default = {
     labels             = {}
     subnet_ids         = []
   }
-  cert-manager = {
-    namespace_patterns = ["cert-manager"]
-    labels             = {}
-    subnet_ids         = []
-  }
   argocd = {
     namespace_patterns = ["argocd"]
     labels             = {}
@@ -55,18 +50,7 @@ default = {
 }
 
 # IRSA configurations - empty to preserve existing resources
-irsa_configs = {
-  alb-controller = {
-    namespace            = "kube-system"
-    service_account_name = "aws-load-balancer-controller"
-    policy_json_path     = "modules/irsa/policies/alb-controller.json"
-  }
-  cert-manager = {
-    namespace            = "cert-manager"
-    service_account_name = "cert-manager"
-    policy_json_path     = "modules/irsa/policies/cert-manager.json"
-  }
-}
+irsa_configs = {}
 
 # Disable IRSA since resources already exist
 enable_irsa = true

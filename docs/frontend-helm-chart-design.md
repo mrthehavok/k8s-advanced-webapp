@@ -70,18 +70,12 @@ service:
 ingress:
   enabled: true
   className: alb
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
+  annotations: {}
   hosts:
     - host: team-notes.example.com
       paths:
         - path: /
           pathType: Prefix
-  tls:
-    - secretName: frontend-tls
-      hosts:
-        - team-notes.example.com
 
 # HPA configuration
 autoscaling:

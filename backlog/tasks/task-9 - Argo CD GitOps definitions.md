@@ -35,12 +35,12 @@ Implement GitOps deployment workflow using Argo CD:
 
 ## Session History
 
-- 2025-08-05: Live deployment applied, ALB address obtained. Admin password reset & login successful. Screenshot shows backend Degraded, cert-manager & aws-lb controller marked for removal.
+- 2025-08-05: Live deployment applied, ALB address obtained. Admin password reset & login successful. Screenshot shows backend Degraded.
 
 ## Decisions Made
 
-- Use built-in AWS ALB ingress via Terraform/EKS annotations instead of a separate controller. This simplifies the stack and removes the need for `aws-load-balancer-controller` and `cert-manager`.
-- Remove cert-manager and aws-load-balancer-controller Applications; backend health will be fixed in task-7b backend chart.
+- Use built-in AWS ALB ingress via Terraform/EKS annotations instead of a separate controller. This simplifies the stack.
+- Backend health will be fixed in task-7b backend chart.
 
 ## Files Modified
 

@@ -1,5 +1,5 @@
 id: task-2
-title: "Terraform: EKS on Fargate with IAM/OIDC & cert-manager issuers"
+title: "Terraform: EKS on Fargate with IAM/OIDC"
 status: "Done"
 created: 2025-08-01
 updated: 2025-08-01
@@ -10,19 +10,19 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 
 - EKS cluster running on Fargate profiles
 - Public & private subnets via VPC module (cost-efficient defaults)
-- IAM roles for service accounts (IRSA) to allow cert-manager & external-DNS access
+- IAM roles for service accounts (IRSA) to allow external-DNS access
 - OIDC provider association for the cluster
 - ALB Ingress Controller (AWS Load Balancer Controller) IAM policies
 - Output kubeconfig and cluster details
 - Tags & cost-control parameters
-- Fargate profiles for dev, monitoring, cert-manager, and argocd namespaces
+- Fargate profiles for dev, monitoring, and argocd namespaces
 
 ## Acceptance Criteria
 
 - [ ] Terraform configuration in `infra/terraform/eks-fargate` directory
 - [ ] `terraform fmt` and `terraform validate` pass
 - [ ] `terraform apply` completes without errors in a sandbox AWS account
-- [ ] Cluster supports ALB Ingress Controller & cert-manager
+- [ ] Cluster supports ALB Ingress Controller
 - [ ] Documentation of variables and cost considerations
 
 ## Session History
@@ -35,7 +35,7 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 - 2025-08-01 16:18: `terraform plan` and test `terraform apply` with dummy resource successful.
 - 2025-08-01 17:06: Pushed IRSA & Fargate phase branch and opened PR https://github.com/mrthehavok/k8s-advanced-webapp/pull/4
 
-- 2025-08-02 13:38: Phase-4: Added outputs for ALB Controller and cert-manager IRSA roles. Updated documentation.
+- 2025-08-02 13:38: Phase-4: Added outputs for ALB Controller IRSA role. Updated documentation.
 - 2025-08-02 14:11: Phase-5: Added dev/prod tfvars examples and successfully ran `terraform apply` in sandbox.
 
 ## Decisions Made
@@ -46,7 +46,7 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 - Separate IAM policies for each service requiring IRSA
 - S3 + DynamoDB backend for state management with encryption
 - Fargate profiles for all workloads (no EC2 nodes)
-- IRSA enabled for ALB Controller, Cert-Manager, and External-DNS
+- IRSA enabled for ALB Controller, and External-DNS
 - Provider version constraints for stability
 
 ## Files Modified
@@ -66,8 +66,8 @@ Provision AWS infrastructure necessary for the “Team Notes” stack using Terr
 - infra/terraform/eks-fargate/modules/irsa/main.tf (created)
 - infra/terraform/eks-fargate/modules/irsa/variables.tf (created)
 - infra/terraform/eks-fargate/modules/irsa/outputs.tf (created)
-- infra/terraform/eks-fargate/modules/irsa/policies/alb-controller.json (created)
-- infra/terraform/eks-fargate/modules/irsa/policies/cert-manager.json (created)
+- infra/terraform/eks-fargate/modules/irsa/policies/alb-controller.json (removed)
+- infra/terraform/eks-fargate/modules/irsa/policies/cert-manager.json (removed)
 - infra/terraform/eks-fargate/modules/irsa/policies/external-dns.json (created)
 - https://github.com/mrthehavok/k8s-advanced-webapp/pull/2 (pull request opened)
 - https://github.com/mrthehavok/k8s-advanced-webapp/pull/4 (pull request opened)

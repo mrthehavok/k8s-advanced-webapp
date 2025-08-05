@@ -1,5 +1,5 @@
 id: task-7
-title: "Ingress Controller & cert-manager ClusterIssuer"
+title: "Ingress Controller"
 status: "Done"
 depends_on: ["task-2"]
 created: 2025-08-01
@@ -11,14 +11,11 @@ Provision ingress and TLS stack:
 
 - Deploy AWS Load Balancer Controller via Helm in `kube-system` namespace
 - Configure IAM role & policy (IRSA) from Terraform outputs
-- Install cert-manager via Helm in dedicated `cert-manager` namespace
-- Create ClusterIssuer resources for Let's Encrypt (staging & prod) using Route53 DNS-01 or HTTP-01 with ALB
-- Validate certificate issuance with test Ingress
+- Validate Ingress connectivity
 
 ## Acceptance Criteria
 
 - [x] Helm chart definitions committed
-- [x] ClusterIssuer YAML manifests in `k8s/base/tls/`
 - [x] Documentation on DNS and ACM prerequisites
 - [x] Verified certificate issuance in dev namespace
 
@@ -27,7 +24,7 @@ Provision ingress and TLS stack:
 - 2025-08-03 10:36: Started work on task-7, creating implementation plan and design notes.
 - 2025-08-03 10:40: Created branch `feat/task-7-ingress`.
 - 2025-08-03 10:40: Committed design notes to backlog.
-- 2025-08-03 10:45: Created base Kubernetes manifests for ingress controller, cert-manager, and TLS issuers.
+- 2025-08-03 10:45: Created base Kubernetes manifests for ingress controller.
 - 2025-08-03 10:45: Updated frontend Helm chart with ingress annotations.
 - 2025-08-03 10:45: Committed all new manifests and chart changes.
 - 2025-08-03 10:50: Created `dev` overlay with environment-specific patches.
@@ -44,37 +41,18 @@ Provision ingress and TLS stack:
 - No need for NodePort services (critical for Fargate)
 - Direct pod-to-pod networking via AWS VPC CNI
 - Cost-effective: no additional EC2 instances for ingress
-- Built-in support for AWS Certificate Manager (ACM) as alternative to cert-manager
+- Built-in support for AWS Certificate Manager (ACM)
 
-### 2. TLS Strategy: cert-manager with Let's Encrypt
-
-**Primary approach**: cert-manager with DNS-01 challenge via Route53
-
-- DNS-01 allows wildcard certificates
-- No need for HTTP endpoints during validation
-- IRSA policy already includes Route53 permissions (confirmed in cert-manager.json)
-
-**Alternative**: AWS Certificate Manager (ACM) for simpler setup if wildcard not needed
-
-### 3. Namespace and Release Structure
+### 2. Namespace and Release Structure
 
 ```yaml
 # AWS Load Balancer Controller
 namespace: kube-system
 release: aws-load-balancer-controller
-sync-wave: "1"  # Deploy first
-
-# cert-manager
-namespace: cert-manager
-release: cert-manager
-sync-wave: "2"  # Deploy after ALB controller
-
-# ClusterIssuers
-namespace: cert-manager  # ClusterIssuers are cluster-scoped but managed here
-sync-wave: "3"  # Deploy after cert-manager is ready
+sync-wave: "1" # Deploy first
 ```
 
-### 4. Helm Values Configuration
+### 3. Helm Values Configuration
 
 #### AWS Load Balancer Controller (v2.7.0+)
 
@@ -103,92 +81,7 @@ resources:
     memory: 128Mi
 ```
 
-#### cert-manager (v1.14.0+)
-
-```yaml
-installCRDs: true # Manage CRDs via Helm
-
-serviceAccount:
-  create: true
-  name: cert-manager
-  annotations:
-    eks.amazonaws.com/role-arn: "${cert_manager_role_arn}" # From Terraform
-
-# Fargate compatibility
-securityContext:
-  fsGroup: 1001
-
-# DNS-01 solver configuration
-extraArgs:
-  - --dns01-recursive-nameservers-only
-  - --dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53
-
-resources:
-  limits:
-    memory: 256Mi
-  requests:
-    cpu: 50m
-    memory: 128Mi
-
-webhook:
-  resources:
-    limits:
-      memory: 128Mi
-    requests:
-      cpu: 10m
-      memory: 64Mi
-
-cainjector:
-  resources:
-    limits:
-      memory: 256Mi
-    requests:
-      cpu: 50m
-      memory: 128Mi
-```
-
-### 5. ClusterIssuer Configurations
-
-#### Let's Encrypt Staging (for testing)
-
-```yaml
-apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
-metadata:
-  name: letsencrypt-staging
-spec:
-  acme:
-    server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: devops@example.com # Will be parameterized
-    privateKeySecretRef:
-      name: letsencrypt-staging-key
-    solvers:
-      - dns01:
-          route53:
-            region: ${aws_region}
-            # Uses IRSA, no credentials needed
-```
-
-#### Let's Encrypt Production
-
-```yaml
-apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
-metadata:
-  name: letsencrypt-prod
-spec:
-  acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
-    email: devops@example.com # Will be parameterized
-    privateKeySecretRef:
-      name: letsencrypt-prod-key
-    solvers:
-      - dns01:
-          route53:
-            region: ${aws_region}
-```
-
-### 6. Frontend Ingress TLS Annotations
+### 4. Frontend Ingress TLS Annotations
 
 ```yaml
 # In charts/frontend/values.yaml
@@ -201,53 +94,27 @@ ingress:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-path: /
 
-    # cert-manager integration
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    cert-manager.io/acme-challenge-type: dns01
-
     # SSL configuration
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/ssl-redirect: "443"
-
-  tls:
-    - secretName: frontend-tls-certificate
-      hosts:
-        - "app.${domain_name}"
 ```
 
-### 7. Validation Steps
+### 5. Validation Steps
 
 ```bash
 # 1. Verify controller deployment
 kubectl get pods -n kube-system -l app.kubernetes.io/name=aws-load-balancer-controller
 kubectl logs -n kube-system -l app.kubernetes.io/name=aws-load-balancer-controller
 
-# 2. Verify cert-manager
-kubectl get pods -n cert-manager
-kubectl get crds | grep cert-manager
-
-# 3. Check ClusterIssuers
-kubectl get clusterissuer
-kubectl describe clusterissuer letsencrypt-staging
-
-# 4. Deploy test ingress with staging issuer first
-kubectl apply -f test-ingress-staging.yaml
-
-# 5. Monitor certificate creation
-kubectl get certificate -A
-kubectl describe certificate frontend-tls-certificate -n dev
-
-# 6. Check ingress and ALB
+# 2. Check ingress and ALB
 kubectl get ingress -A
 kubectl describe ingress frontend -n dev
 
-# 7. Test HTTPS endpoint (staging cert will show warning)
+# 3. Test HTTPS endpoint
 curl -k https://app-dev.${domain_name}
-
-# 8. Switch to production issuer after successful staging test
 ```
 
-### 8. Directory Structure
+### 6. Directory Structure
 
 ```
 k8s/
@@ -256,14 +123,6 @@ k8s/
 │   │   ├── kustomization.yaml
 │   │   ├── namespace.yaml
 │   │   └── helm-release.yaml
-│   ├── cert-manager/
-│   │   ├── kustomization.yaml
-│   │   ├── namespace.yaml
-│   │   └── helm-release.yaml
-│   └── tls/
-│       ├── kustomization.yaml
-│       ├── letsencrypt-staging.yaml
-│       └── letsencrypt-prod.yaml
 └── overlays/
     ├── dev/
     │   └── ingress-patches/
@@ -274,21 +133,21 @@ k8s/
 ## Files Modified
 
 - `backlog/tasks/task-7 - Ingress controller and cert-manager.md` (this file)
-- `k8s/base/ingress-controller/namespace.yaml` (created)
-- `k8s/base/ingress-controller/helm-release.yaml` (created)
-- `k8s/base/ingress-controller/kustomization.yaml` (created)
-- `k8s/base/cert-manager/namespace.yaml` (created)
-- `k8s/base/cert-manager/helm-release.yaml` (created)
-- `k8s/base/cert-manager/kustomization.yaml` (created)
-- `k8s/base/tls/letsencrypt-staging.yaml` (created)
-- `k8s/base/tls/letsencrypt-prod.yaml` (created)
-- `k8s/base/tls/kustomization.yaml` (created)
+- `k8s/base/ingress-controller/namespace.yaml` (removed)
+- `k8s/base/ingress-controller/helm-release.yaml` (removed)
+- `k8s/base/ingress-controller/kustomization.yaml` (removed)
+- `k8s/base/cert-manager/namespace.yaml` (removed)
+- `k8s/base/cert-manager/helm-release.yaml` (removed)
+- `k8s/base/cert-manager/kustomization.yaml` (removed)
+- `k8s/base/tls/letsencrypt-staging.yaml` (removed)
+- `k8s/base/tls/letsencrypt-prod.yaml` (removed)
+- `k8s/base/tls/kustomization.yaml` (removed)
 - `charts/frontend/values.yaml` (modified)
-- `k8s/overlays/dev/kustomization.yaml` (created)
-- `k8s/overlays/dev/ingress-patches/aws-load-balancer-controller-helm-release-patch.yaml` (created)
-- `k8s/overlays/dev/ingress-patches/cert-manager-helm-release-patch.yaml` (created)
-- `k8s/overlays/dev/ingress-patches/letsencrypt-staging-cluster-issuer-patch.yaml` (created)
-- `k8s/overlays/dev/ingress-patches/letsencrypt-prod-cluster-issuer-patch.yaml` (created)
+- `k8s/overlays/dev/kustomization.yaml` (removed)
+- `k8s/overlays/dev/ingress-patches/aws-load-balancer-controller-helm-release-patch.yaml` (removed)
+- `k8s/overlays/dev/ingress-patches/cert-manager-helm-release-patch.yaml` (removed)
+- `k8s/overlays/dev/ingress-patches/letsencrypt-staging-cluster-issuer-patch.yaml` (removed)
+- `k8s/overlays/dev/ingress-patches/letsencrypt-prod-cluster-issuer-patch.yaml` (removed)
 
 ## Blockers
 

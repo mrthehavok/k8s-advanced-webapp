@@ -12,7 +12,7 @@ Create a high-level architecture document and repository layout proposal coverin
 - Namespaces (dev, monitoring)
 - GitOps flow with Argo CD App-of-Apps
 - Helm chart hierarchy (frontend, backend, ingress, monitoring)
-- TLS termination with cert-manager + ALB Ingress Controller
+- TLS termination with ALB Ingress Controller
 - Observability stack (kube-prometheus-stack) and alert rules
 - CI/CD image build and chart release lifecycle
 - Cost-control practices (Fargate sizing, limits)
@@ -35,10 +35,10 @@ Create a high-level architecture document and repository layout proposal coverin
 
 - **Architecture Pattern**: Adopted microservices architecture with separate frontend (React SPA) and backend (FastAPI) services for better scalability and independent deployment.
 - **GitOps Approach**: Chose Argo CD with App-of-Apps pattern for declarative continuous deployment, enabling better auditability and rollback capabilities.
-- **Namespace Strategy**: Separated concerns into distinct namespaces (dev, monitoring, cert-manager, argocd) for better resource isolation and RBAC.
+- **Namespace Strategy**: Separated concerns into distinct namespaces (dev, monitoring, argocd) for better resource isolation and RBAC.
 - **Observability Stack**: Selected kube-prometheus-stack (Prometheus + Grafana) for comprehensive metrics collection and visualization.
 - **Cost Optimization**: Designed for AWS Fargate to eliminate node management overhead and enable precise resource allocation per pod.
-- **Security**: Implemented TLS termination at ALB with cert-manager for automated certificate management using Let's Encrypt.
+- **Security**: Implemented TLS termination at ALB for automated certificate management.
 - **Repository Structure**: Organized code into logical directories (services/, charts/, infra/, gitops/) following GitOps best practices.
 
 ## Files Modified

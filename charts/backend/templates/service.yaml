@@ -1,17 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "backend.fullname" . }}
-  labels: {{- include "backend.labels" . | nindent 4 }}
+  name: { { include "backend.fullname" . } }
+  labels: { { - include "backend.labels" . | nindent 4 } }
   annotations:
-    alb.ingress.kubernetes.io/healthcheck-path: /api/healthz
-  annotations:
-    alb.ingress.kubernetes.io/healthcheck-path: /api/healthz
+    # AIDEV-NOTE: ALB-related annotations will be managed via the AWS Load Balancer Controller terraform module directly.
 spec:
-  type: {{ .Values.service.type }}
+  type: { { .Values.service.type } }
   ports:
-    - port: {{ .Values.service.port }}
+    - port: { { .Values.service.port } }
       targetPort: http
       protocol: TCP
       name: http
-  selector: {{- include "backend.selectorLabels" . | nindent 4 }}
+  selector: { { - include "backend.selectorLabels" . | nindent 4 } }

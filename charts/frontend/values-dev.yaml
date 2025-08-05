@@ -5,10 +5,7 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-  tls:
-    - secretName: frontend-tls-dev
-      hosts:
-        - dev.team-notes.example.com
+  tls: []
 
 autoscaling:
   enabled: false

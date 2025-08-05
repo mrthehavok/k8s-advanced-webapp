@@ -16,8 +16,7 @@ Chart requirements:
   - Resources: requests 100m CPU / 128Mi, limits 300m / 256Mi
   - Liveness `/` probe, readiness `/` probe
 - `Service` ClusterIP on port 80
-- `Ingress` (ALB Ingress, annotation-driven) with TLS from cert-manager ClusterIssuer
-  - Host configurable (`team-notes.example.com`)
+- `Ingress` (ALB Ingress, annotation-driven)
 - `HorizontalPodAutoscaler`
   - minReplicas 2, maxReplicas 5
   - CPU target 60 %
@@ -44,7 +43,7 @@ Chart requirements:
 - Created comprehensive design document covering chart structure, values schema, and implementation patterns
 - Decided to use conditional HPA rendering based on `.Values.autoscaling.enabled`
 - Planned for optional ConfigMap to support runtime configuration
-- Designed for ALB Ingress with cert-manager TLS integration
+- Designed for ALB Ingress
 
 ## Files Modified
 
@@ -70,5 +69,5 @@ None - all work completed successfully.
 ## Next Steps
 
 - Deploy to dev environment for testing
-- Configure cert-manager and ingress controller (task-7)
+- Configure ingress controller (task-7)
 - Integrate with Argo CD for GitOps deployment (task-9)
